@@ -84,20 +84,32 @@
           </div>
         </div>
 
-        <div v-if="row.source" class="panel">
+        <div class="panel source-panel">
           <header class="panel-head">
-            <h2>采集来源</h2>
-            <span class="source-tag">谷歌插件</span>
+            <h2>第三方数据来源</h2>
+            <div class="source-tools">
+              <span class="source-tag">{{ sourceMethod }}</span>
+              <el-button size="mini" round icon="el-icon-refresh" @click="resync">重新同步</el-button>
+            </div>
           </header>
 
           <dl class="facts">
-            <div><dt>来源站点</dt><dd>{{ row.source.site }}</dd></div>
-            <div><dt>采集时间</dt><dd>{{ row.source.collectedAt }}</dd></div>
+            <div><dt>来源站点</dt><dd>{{ sourceSite }}</dd></div>
+            <div><dt>最近同步</dt><dd>{{ sourceSynced }}</dd></div>
+            <div><dt>原始标题</dt><dd>{{ sourceTitle }}</dd></div>
+            <div><dt>同步方式</dt><dd>{{ sourceMethod }}</dd></div>
             <div class="span-2">
-              <dt>采集页面</dt>
-              <dd class="break">{{ row.source.url }}</dd>
+              <dt>原始页面</dt>
+              <dd class="break">
+                <a v-if="sourceUrl" :href="sourceUrl" target="_blank" rel="noopener">{{ sourceUrl }}</a>
+                <span v-else>—</span>
+              </dd>
             </div>
           </dl>
+
+          <p class="source-note">
+            产品价格、规格与描述均以第三方页面为准；同步失败或页面改版时，可重新同步或在编辑页手动修正。
+          </p>
         </div>
       </div>
 
@@ -160,7 +172,7 @@
 <script>
 import StatusTag from '@/components/StatusTag.vue'
 import { statusOptions } from '@/data/adminData'
-import { findProduct, listProducts, listSuppliers, saveProducts } from '@/data/adminStore'
+import { findProduct, listProducts, listSuppliers, saveProducts, today } from '@/data/adminStore'
 
 const webUrl = import.meta.env.VITE_WEB_URL || 'http://localhost:5173'
 
@@ -208,6 +220,33 @@ export default {
       return this.products
         .filter((item) => item.supplier === this.row.supplier && item.id !== this.row.id)
         .slice(0, 4)
+    },
+    sourceSite() {
+      if (!this.row) return '—'
+      if (this.row.source && this.row.source.site) return this.row.source.site
+      const website = (this.supplier && this.supplier.website) || ''
+      return (
+        website
+          .replace(/^https?:\/\//, '')
+          .replace(/^www\./, '')
+          .replace(/\/$/, '') || '—'
+      )
+    },
+    sourceUrl() {
+      if (!this.row) return ''
+      return (this.row.source && this.row.source.url) || (this.supplier && this.supplier.website) || ''
+    },
+    sourceSynced() {
+      if (!this.row) return '—'
+      return (this.row.source && this.row.source.collectedAt) || this.row.updated
+    },
+    sourceMethod() {
+      return this.row && this.row.source ? '谷歌插件采集' : '供应商目录同步'
+    },
+    sourceTitle() {
+      if (!this.row) return '—'
+      if (this.row.thirdParty && this.row.thirdParty.title) return this.row.thirdParty.title
+      return this.row.name
     }
   },
   watch: {
@@ -243,11 +282,18 @@ export default {
     },
     setLive(enabled) {
       this.row.status = enabled ? 'live' : 'paused'
-      this.row.updated = new Date().toISOString().slice(0, 10)
+      this.row.updated = today()
       this.products = saveProducts(
         this.products.map((item) => (item.id === this.row.id ? { ...item, ...this.row } : item))
       )
       this.$message.success(`${this.row.name} 已${enabled ? '上架' : '下架'}`)
+    },
+    resync() {
+      this.row.updated = today()
+      this.products = saveProducts(
+        this.products.map((item) => (item.id === this.row.id ? { ...item, ...this.row } : item))
+      )
+      this.$message.success(`已触发从 ${this.sourceSite} 重新同步`)
     }
   }
 }
@@ -484,6 +530,30 @@ export default {
   font-size: 11px;
   font-weight: 700;
   color: $primary;
+}
+
+.source-tools {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.source-note {
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px dashed $line;
+  font-size: 11.5px;
+  line-height: 1.7;
+  color: $muted;
+}
+
+.facts a {
+  color: $primary;
+  word-break: break-all;
+
+  &:hover {
+    color: $primary-dark;
+  }
 }
 
 .break {
