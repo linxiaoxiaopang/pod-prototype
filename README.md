@@ -6,7 +6,7 @@
 | 子项目 | 目录 | 说明 | 默认端口 |
 |---|---|---|---|
 | 业务端（C 端） | `apps/web` | 首页、供应商目录/详情、产品目录 | `5173` |
-| 后台端（管理台） | `apps/admin` | 登录、运营概览、供应商/产品/对比管理、站点设置 | `5174` |
+| 后台端（管理台） | `apps/admin` | 登录、运营概览、供应商/产品/帮助中心管理、谷歌采集插件管理 | `5174` |
 
 两端都是独立的 Vue 2 + Vite 工程，可单独开发、构建与部署，共用同一套设计语言与依赖版本。
 
@@ -54,11 +54,19 @@ npm run preview:admin
 | `/login` | 登录 | 演示账号校验、记住登录、登录后回跳 |
 | `/dashboard` | 运营概览 | 4 个统计卡、最近更新供应商表格、操作动态、快捷入口 |
 | `/suppliers` | 供应商管理 | 搜索、状态筛选、目录展示开关、分页、跳转业务端详情 |
-| `/products` | 产品目录 | 搜索、供应商/品类筛选、上架开关、分页 |
-| `/comparisons` | 对比内容 | 状态筛选、发布/转草稿、预览业务端对比页 |
-| `/settings` | 站点设置 | 站点信息、货币、分页、默认排序、维护模式（本地持久化） |
+| `/suppliers/new` | 创建供应商 | 基础信息、品类与工艺、集成平台、生产配送、状态与卡片预览、表单校验 |
+| `/suppliers/:id/edit` | 编辑供应商 | 回填现有信息、保存修改、删除供应商 |
+| `/products` | 产品目录 | 搜索、供应商/品类筛选、上架开关、分页、跳转业务端产品列表 |
+| `/products/new` | 创建产品 | 供应商与品类选择、价格与履约、颜色/尺码规格、印刷工艺、上架状态与卡片预览 |
+| `/products/:id/edit` | 编辑产品 | 回填现有信息、保存修改、删除产品 |
+| `/extension` | 谷歌插件管理 | 插件连接状态、接口密钥、采集任务配置与启停、采集结果审核入库、授权域名、运行日志 |
+| `/help` | 帮助中心管理 | 分类增删改、问题增删改、发布/下架、搜索筛选、置顶排序、支持入口设置 |
+
+采集插件（Chrome 扩展）在授权域名下抓取竞品产品信息，结果先进入 `/extension` 的「待审核产品」，
+审核通过后以草稿形式写入产品目录，随后可在 `/products` 补充价格、规格与上架状态。
 
 登录态存于 `localStorage`（未勾选“记住登录状态”时存 `sessionStorage`），路由守卫拦截未登录访问。
+新建/编辑的供应商、产品与帮助中心内容写入 `localStorage`（见 `apps/admin/src/data/adminStore.js`），刷新后保留，并可继续在列表中编辑。
 
 ## 目录结构
 
@@ -90,9 +98,10 @@ npm run preview:admin
 │           ├── App.vue / main.js
 │           ├── router/index.js  # 路由守卫 + 登录态
 │           ├── layouts/AdminLayout.vue
-│           ├── data/adminData.js
+│           ├── data/            # adminData.js（演示数据）、adminStore.js（localStorage 数据层）
 │           ├── styles/          # variables.scss、index.scss
-│           ├── views/           # LoginPage、DashboardPage、Suppliers/Products/Comparisons AdminPage、SettingsPage
+│           ├── views/           # LoginPage、DashboardPage、Suppliers/Products/HelpCenter/Extension AdminPage、
+│           │                    # SupplierFormPage、ProductFormPage
 │           └── components/      # StatusTag
 ```
 

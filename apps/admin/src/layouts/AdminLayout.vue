@@ -66,7 +66,6 @@
               <i class="el-icon-arrow-down"></i>
             </span>
             <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item command="settings">站点设置</el-dropdown-item>
               <el-dropdown-item command="storefront">打开业务端</el-dropdown-item>
               <el-dropdown-item command="logout" divided>退出登录</el-dropdown-item>
             </el-dropdown-menu>
@@ -85,6 +84,7 @@
 
 <script>
 import { AUTH_KEY } from '@/router'
+import { listCrawlItems, listHelpArticles, listSuppliers } from '@/data/adminStore'
 
 const webUrl = import.meta.env.VITE_WEB_URL || 'http://localhost:5173'
 
@@ -95,23 +95,46 @@ export default {
       webUrl,
       keyword: '',
       sidebarOpen: false,
-      navItems: [
-        { to: '/dashboard', label: '运营概览', icon: 'el-icon-data-line' },
-        { to: '/suppliers', label: '供应商管理', icon: 'el-icon-office-building', badge: '12' },
-        { to: '/products', label: '产品目录', icon: 'el-icon-s-goods' },
-        { to: '/comparisons', label: '对比内容', icon: 'el-icon-s-grid', badge: '1' },
-        { to: '/settings', label: '站点设置', icon: 'el-icon-setting' }
-      ]
+      supplierCount: listSuppliers().length,
+      helpPendingCount: listHelpArticles().filter((item) => item.status !== 'published').length,
+      crawlPendingCount: listCrawlItems().filter((item) => item.status === 'pending').length
     }
   },
   computed: {
     title() {
       return this.$route.meta.title || '运营后台'
+    },
+    navItems() {
+      return [
+        { to: '/dashboard', label: '运营概览', icon: 'el-icon-data-line' },
+        {
+          to: '/suppliers',
+          label: '供应商管理',
+          icon: 'el-icon-office-building',
+          badge: String(this.supplierCount)
+        },
+        { to: '/products', label: '产品目录', icon: 'el-icon-s-goods' },
+        {
+          to: '/extension',
+          label: '采集插件',
+          icon: 'el-icon-connection',
+          badge: this.crawlPendingCount ? String(this.crawlPendingCount) : ''
+        },
+        {
+          to: '/help',
+          label: '帮助中心',
+          icon: 'el-icon-chat-dot-square',
+          badge: this.helpPendingCount ? String(this.helpPendingCount) : ''
+        }
+      ]
     }
   },
   watch: {
     $route() {
       this.sidebarOpen = false
+      this.supplierCount = listSuppliers().length
+      this.helpPendingCount = listHelpArticles().filter((item) => item.status !== 'published').length
+      this.crawlPendingCount = listCrawlItems().filter((item) => item.status === 'pending').length
     }
   },
   methods: {
@@ -120,10 +143,6 @@ export default {
       this.$router.push({ path: '/suppliers', query: value ? { q: value } : {} }).catch(() => {})
     },
     onCommand(command) {
-      if (command === 'settings') {
-        this.$router.push('/settings').catch(() => {})
-        return
-      }
       if (command === 'storefront') {
         window.open(this.webUrl, '_blank', 'noopener')
         return

@@ -88,7 +88,7 @@ export default {
       facts: [
         { value: '12', label: '供应商' },
         { value: '16', label: '在售产品' },
-        { value: '6', label: '对比内容' }
+        { value: '10', label: '帮助中心' }
       ]
     }
   },

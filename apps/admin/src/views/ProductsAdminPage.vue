@@ -5,9 +5,10 @@
         <h1>产品目录</h1>
         <p>{{ rows.length }} 条产品记录，其中 {{ liveCount }} 条已上架。</p>
       </div>
-      <el-button type="primary" icon="el-icon-refresh" round @click="syncCatalog">
-        同步供应商产品
-      </el-button>
+      <div class="head-actions">
+        <el-button icon="el-icon-refresh" round @click="syncCatalog">同步供应商产品</el-button>
+        <el-button type="primary" icon="el-icon-plus" round @click="createNew">新增产品</el-button>
+      </div>
     </header>
 
     <div class="panel">
@@ -94,7 +95,7 @@
 
 <script>
 import StatusTag from '@/components/StatusTag.vue'
-import { adminProducts } from '@/data/adminData'
+import { listProducts, saveProducts } from '@/data/adminStore'
 
 const webUrl = import.meta.env.VITE_WEB_URL || 'http://localhost:5173'
 
@@ -103,7 +104,7 @@ export default {
   components: { StatusTag },
   data() {
     return {
-      rows: adminProducts.map((item) => ({ ...item })),
+      rows: listProducts(),
       keyword: '',
       supplier: '',
       category: '',
@@ -149,13 +150,17 @@ export default {
   methods: {
     toggleLive(row, enabled) {
       row.status = enabled ? 'live' : 'paused'
+      saveProducts(this.rows)
       this.$message.success(`${row.name} 已${enabled ? '上架' : '下架'}`)
     },
     edit(row) {
-      this.$message.info(`编辑「${row.name}」（演示环境不保存）`)
+      this.$router.push(`/products/${row.id}/edit`).catch(() => {})
     },
     preview(row) {
-      window.open(`${webUrl}/#/suppliers`, '_blank', 'noopener')
+      window.open(`${webUrl}/#/products?q=${encodeURIComponent(row.name)}`, '_blank', 'noopener')
+    },
+    createNew() {
+      this.$router.push('/products/new').catch(() => {})
     },
     syncCatalog() {
       this.$message.success('已触发同步任务，稍后可在列表查看结果')
@@ -167,4 +172,10 @@ export default {
 <style lang="scss" scoped>
 @use '../styles/variables' as *;
 @use './admin-page';
+
+.head-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
 </style>

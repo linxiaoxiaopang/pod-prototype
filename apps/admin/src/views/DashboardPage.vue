@@ -7,7 +7,7 @@
       </div>
       <div class="head-actions">
         <el-button icon="el-icon-refresh" round @click="refresh">刷新数据</el-button>
-        <el-button type="primary" icon="el-icon-plus" round @click="$router.push('/suppliers')">
+        <el-button type="primary" icon="el-icon-plus" round @click="$router.push('/suppliers/new')">
           新增供应商
         </el-button>
       </div>
@@ -92,47 +92,56 @@
 
 <script>
 import StatusTag from '@/components/StatusTag.vue'
-import { adminSuppliers, adminProducts, adminComparisons, adminActivities } from '@/data/adminData'
+import { adminActivities } from '@/data/adminData'
+import { listCrawlItems, listHelpArticles, listProducts, listSuppliers } from '@/data/adminStore'
 
 export default {
   name: 'DashboardPage',
   components: { StatusTag },
   data() {
     return {
+      suppliers: listSuppliers(),
+      products: listProducts(),
+      helpArticles: listHelpArticles(),
+      crawlItems: listCrawlItems(),
       activities: adminActivities,
       shortcuts: [
         { to: '/suppliers', icon: 'el-icon-office-building', title: '供应商管理', desc: '维护目录信息、状态与生产时效' },
         { to: '/products', icon: 'el-icon-s-goods', title: '产品目录', desc: '同步官网产品与上下架状态' },
-        { to: '/comparisons', icon: 'el-icon-s-grid', title: '对比内容', desc: '编辑对比维度与结论' }
+        { to: '/extension', icon: 'el-icon-connection', title: '采集插件', desc: '用 Chrome 扩展采集竞品产品' },
+        { to: '/help', icon: 'el-icon-chat-dot-square', title: '帮助中心', desc: '维护分类、问题与支持入口' }
       ]
     }
   },
   computed: {
     stats() {
-      const liveProducts = adminProducts.filter((item) => item.status === 'live').length
-      const pending = adminProducts.filter((item) => item.status === 'draft').length +
-        adminComparisons.filter((item) => item.status !== 'published').length
+      const liveProducts = this.products.filter((item) => item.status === 'live').length
+      const publishedHelp = this.helpArticles.filter((item) => item.status === 'published').length
+      const pending =
+        this.products.filter((item) => item.status === 'draft').length +
+        this.helpArticles.filter((item) => item.status !== 'published').length +
+        this.crawlItems.filter((item) => item.status === 'pending').length
 
       return [
         {
           label: '供应商',
-          value: adminSuppliers.length,
-          meta: `${adminSuppliers.filter((item) => item.status === 'active').length} 家运营中`,
+          value: this.suppliers.length,
+          meta: `${this.suppliers.filter((item) => item.status === 'active').length} 家运营中`,
           icon: 'el-icon-office-building',
           tone: 'violet'
         },
         {
           label: '在售产品',
           value: liveProducts,
-          meta: `共 ${adminProducts.length} 条产品记录`,
+          meta: `共 ${this.products.length} 条产品记录`,
           icon: 'el-icon-s-goods',
           tone: 'green'
         },
         {
-          label: '对比内容',
-          value: adminComparisons.filter((item) => item.status === 'published').length,
-          meta: `累计 ${adminComparisons.reduce((sum, item) => sum + item.views, 0).toLocaleString()} 次浏览`,
-          icon: 'el-icon-s-grid',
+          label: '帮助中心',
+          value: publishedHelp,
+          meta: `共 ${this.helpArticles.length} 个问题`,
+          icon: 'el-icon-chat-dot-square',
           tone: 'blue'
         },
         {
@@ -145,7 +154,7 @@ export default {
       ]
     },
     recentSuppliers() {
-      return [...adminSuppliers]
+      return [...this.suppliers]
         .sort((a, b) => (a.updated < b.updated ? 1 : -1))
         .slice(0, 5)
     }
@@ -401,11 +410,15 @@ export default {
 
 .shortcuts {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   gap: 16px;
   margin-top: 16px;
 
-  @include down(900px) {
+  @include down(1200px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @include down(700px) {
     grid-template-columns: 1fr;
   }
 }

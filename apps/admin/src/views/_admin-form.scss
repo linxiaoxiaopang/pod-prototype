@@ -1,0 +1,252 @@
+// 后台表单页共用样式（创建/编辑供应商、产品等）
+@use '../styles/variables' as *;
+
+.back {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-bottom: 10px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  font-family: $font;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: $muted;
+  cursor: pointer;
+  transition: color 0.2s $ease;
+
+  &:hover {
+    color: $primary;
+  }
+}
+
+.head-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 320px;
+  gap: 16px;
+  align-items: start;
+
+  @include down(1080px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.main-panel {
+  @include card;
+  padding: 22px 24px;
+
+  @include down(620px) {
+    padding: 18px 16px;
+  }
+}
+
+.section {
+  & + & {
+    margin-top: 24px;
+    padding-top: 22px;
+    border-top: 1px solid $line;
+  }
+
+  h2 {
+    margin-bottom: 4px;
+    font-size: 15px;
+    letter-spacing: -0.01em;
+  }
+}
+
+.section-hint {
+  margin-bottom: 16px;
+  font-size: 12.5px;
+  color: $muted;
+}
+
+.grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 18px;
+
+  @include down(620px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0 18px;
+
+  @include down(760px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+
+  :deep(.el-checkbox) {
+    margin: 0;
+    padding: 5px 12px;
+    border: 1px solid $line;
+    border-radius: 8px;
+    background: #fff;
+    transition: border-color 0.2s $ease, background 0.2s $ease;
+  }
+
+  :deep(.el-checkbox__label) {
+    padding-left: 7px;
+    font-size: 12.5px;
+    font-weight: 600;
+    color: $ink-soft;
+  }
+
+  :deep(.el-checkbox.is-checked) {
+    border-color: rgba(91, 75, 255, 0.45);
+    background: $primary-soft;
+
+    .el-checkbox__label {
+      color: $primary;
+    }
+  }
+}
+
+.side {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.side-panel {
+  @include card;
+  padding: 18px 20px;
+
+  h3 {
+    margin-bottom: 12px;
+    font-size: 13.5px;
+    font-weight: 700;
+  }
+}
+
+.status-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  :deep(.el-radio) {
+    margin: 0;
+  }
+
+  :deep(.el-radio__label) {
+    font-size: 12.5px;
+    font-weight: 600;
+    color: $ink-soft;
+  }
+}
+
+.preview {
+  @include card;
+  padding: 18px 20px;
+  background: linear-gradient(165deg, #fbfbff, #fff 70%);
+}
+
+.preview-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+
+  strong {
+    display: block;
+    font-size: 13.5px;
+    font-weight: 800;
+    color: $ink;
+    word-break: break-word;
+  }
+
+  small {
+    font-size: 11.5px;
+    color: $muted;
+  }
+}
+
+.preview-avatar {
+  @include flex-center;
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  background: $primary-soft;
+  color: $primary;
+  font-size: 12.5px;
+  font-weight: 800;
+  flex-shrink: 0;
+}
+
+.preview-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 12px;
+
+  span {
+    padding: 2px 8px;
+    border-radius: 6px;
+    background: $bg;
+    font-size: 11.5px;
+    font-weight: 600;
+    color: $ink-soft;
+  }
+}
+
+.preview-facts {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  padding-top: 12px;
+  border-top: 1px dashed $line;
+
+  div {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    font-size: 12px;
+  }
+
+  dt {
+    color: $muted;
+  }
+
+  dd {
+    margin: 0;
+    font-weight: 700;
+    color: $ink-soft;
+    text-align: right;
+  }
+}
+
+.form-tip {
+  font-size: 12px;
+  line-height: 1.7;
+  color: $muted;
+}
+
+:deep(.el-form-item) {
+  margin-bottom: 16px;
+}
+
+:deep(.el-textarea__inner) {
+  padding: 10px 12px;
+  line-height: 1.7;
+}
+
+:deep(.el-input-number) {
+  width: 100%;
+}

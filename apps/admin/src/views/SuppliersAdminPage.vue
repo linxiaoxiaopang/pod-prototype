@@ -92,7 +92,8 @@
 
 <script>
 import StatusTag from '@/components/StatusTag.vue'
-import { adminSuppliers, statusOptions } from '@/data/adminData'
+import { statusOptions } from '@/data/adminData'
+import { listSuppliers, saveSuppliers } from '@/data/adminStore'
 
 const webUrl = import.meta.env.VITE_WEB_URL || 'http://localhost:5173'
 
@@ -101,7 +102,7 @@ export default {
   components: { StatusTag },
   data() {
     return {
-      rows: adminSuppliers.map((item) => ({ ...item })),
+      rows: listSuppliers(),
       statusOptions,
       keyword: '',
       status: '',
@@ -145,16 +146,17 @@ export default {
   methods: {
     toggleStatus(row, enabled) {
       row.status = enabled ? 'active' : 'paused'
+      saveSuppliers(this.rows)
       this.$message.success(`${row.name} 已${enabled ? '开启' : '关闭'}目录展示`)
     },
     open(row) {
       window.open(`${webUrl}/#/suppliers/${row.id}`, '_blank', 'noopener')
     },
     edit(row) {
-      this.$message.info(`编辑「${row.name}」（演示环境不保存）`)
+      this.$router.push(`/suppliers/${row.id}/edit`).catch(() => {})
     },
     createNew() {
-      this.$message.info('新建供应商表单将在接口接入后开放')
+      this.$router.push('/suppliers/new').catch(() => {})
     }
   }
 }
