@@ -22,6 +22,19 @@ jobs:
     name: Build site
     runs-on: ubuntu-latest
     steps:
+      # 仓库原先按分支发布（Jekyll 会把根目录 README 渲染成首页）。这里尝试把 Pages
+      # 发布源切换为 GitHub Actions；若令牌没有修改站点设置的权限则跳过，不影响后续发布。
+      - name: Ensure Pages source is GitHub Actions
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          echo "current pages config:"
+          gh api "repos/${GITHUB_REPOSITORY}/pages" --jq '{build_type, html_url}' || true
+          gh api --method PUT "repos/${GITHUB_REPOSITORY}/pages" -f build_type=workflow \
+            && echo "Pages source switched to GitHub Actions" \
+            || echo "::warning::Cannot update Pages source automatically; falling back to deploy ordering"
+
       - name: Checkout
         uses: actions/checkout@v4
 
@@ -79,6 +92,13 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
+          build_type=$(gh api "repos/${GITHUB_REPOSITORY}/pages" --jq '.build_type' 2>/dev/null || echo "")
+          echo "pages build_type: ${build_type:-unknown}"
+          if [ "$build_type" = "workflow" ]; then
+            echo "Pages already uses GitHub Actions; nothing to wait for"
+            exit 0
+          fi
+
           deadline=$((SECONDS + 150))
           while [ $SECONDS -lt $deadline ]; do
             status=$(gh api \
@@ -87,9 +107,11 @@ jobs:
               2>/dev/null || echo "")
             echo "branch pages build status: ${status:-none}"
 
-            if [ "$status" = "completed" ]; then
-              break
-            fi
+            case "$status" in
+              completed|cancelled|failure|skipped)
+                break
+                ;;
+            esac
 
             # 分支构建尚未创建时给 30 秒宽限期，避免提前放行被后来的构建覆盖
             if [ -z "$status" ] || [ "$status" = "null" ]; then
