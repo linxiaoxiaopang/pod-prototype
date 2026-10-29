@@ -9,6 +9,7 @@ on:
 
 permissions:
   contents: read
+  actions: read
   pages: write
   id-token: write
 
@@ -70,6 +71,39 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
+      # 仓库的 Pages 也可能在按分支构建（会把仓库根目录的 README 渲染成首页）。
+      # 同一提交下两个发布任务会互相覆盖，谁后完成谁生效；这里先等分支构建结束，
+      # 保证 Actions 产物最后发布。若 Pages 已切换为 GitHub Actions，则本步骤很快跳过。
+      - name: Wait for branch Pages build
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          deadline=$((SECONDS + 150))
+          while [ $SECONDS -lt $deadline ]; do
+            status=$(gh api \
+              "repos/${GITHUB_REPOSITORY}/actions/runs?head_sha=${GITHUB_SHA}&per_page=30" \
+              --jq '[.workflow_runs[] | select(.name == "pages build and deployment")][0].status' \
+              2>/dev/null || echo "")
+            echo "branch pages build status: ${status:-none}"
+
+            if [ "$status" = "completed" ]; then
+              break
+            fi
+
+            # 分支构建尚未创建时给 30 秒宽限期，避免提前放行被后来的构建覆盖
+            if [ -z "$status" ] || [ "$status" = "null" ]; then
+              if [ $SECONDS -gt 30 ]; then
+                break
+              fi
+            fi
+
+            sleep 5
+          done
+          # 留出一点时间让分支构建的发布请求落盘
+          sleep 10
+          echo "proceeding to deploy Actions artifact"
+
       - name: Deploy
         id: deployment
         uses: actions/deploy-pages@v4
