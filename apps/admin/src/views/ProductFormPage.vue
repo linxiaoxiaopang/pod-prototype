@@ -241,11 +241,12 @@ export default {
       this.back()
       return
     }
+    const specs = product.thirdParty || {}
     this.form = {
       ...this.form,
       ...product,
-      colors: [...(product.colors || ['白色', '黑色'])],
-      sizes: [...(product.sizes || ['S', 'M', 'L', 'XL'])],
+      colors: [...(product.colors || specs.colors || ['白色', '黑色'])],
+      sizes: [...(product.sizes || specs.sizes || ['S', 'M', 'L', 'XL'])],
       retailPrice: product.retailPrice || Number((product.price * 1.6).toFixed(2)),
       sku: product.sku || '',
       description: product.description || '',
@@ -287,6 +288,14 @@ export default {
         printMethod: this.form.printMethod,
         status,
         source: this.form.source || null,
+        thirdParty: this.form.thirdParty
+          ? {
+              ...this.form.thirdParty,
+              sizes: [...this.form.sizes],
+              colors: [...this.form.colors],
+              colorCount: this.form.colors.length || this.form.thirdParty.colorCount
+            }
+          : null,
         updated: today()
       }
 

@@ -33,6 +33,143 @@ export const adminProducts = [
   { id: 'apliiq-joggers', name: '抓绒束脚裤', supplier: 'Apliiq', category: '服装', price: 31.8, productionDays: 5, status: 'paused', updated: '2026-10-10' }
 ]
 
+// 第三方产品页字段模板（后台展示用，模拟从供应商官网同步的规格与卖点）
+const adminSpecProfiles = {
+  T恤: {
+    brand: 'Bella + Canvas',
+    model: '3001',
+    material: '100% Airlume 精梳环纺棉',
+    weight: '142 g/m² · 4.2 oz',
+    fit: '中性直筒版型',
+    colorCount: 44,
+    sizes: ['XS', 'S', 'M', 'L', 'XL', '2XL', '3XL', '4XL', '5XL'],
+    colors: ['白色', '黑色', '藏青', '运动灰', '森林绿', '酒红'],
+    printAreas: ['正面', '背面', '左胸', '右胸', '左袖', '右袖', '领标'],
+    highlights: ['侧缝结构，多次水洗不易变形', '可撕除领标，支持自有品牌', '40+ 颜色与 9 个尺码可选'],
+    description: '中性直筒版型，男女同款，适合团队定制与零售上架；印花还原度高，是目录里最常被选中的基础款。'
+  },
+  卫衣: {
+    brand: 'Gildan',
+    model: '18500',
+    material: '80% 棉 / 20% 聚酯纤维',
+    weight: '285 g/m² · 8.4 oz',
+    fit: '中性落肩版型',
+    colorCount: 24,
+    sizes: ['S', 'M', 'L', 'XL', '2XL', '3XL'],
+    colors: ['白色', '黑色', '藏青', '灰色', '森林绿'],
+    printAreas: ['正面', '背面', '左胸', '袖子'],
+    highlights: ['双针车缝领口与袖口', '正面大身平整，适合大幅印花', '内里抓绒，秋冬主推款'],
+    description: '经典厚磅连帽卫衣，正面与背面留白充足，适合大面积图案；内里抓绒保暖，秋冬销量稳定。'
+  },
+  服装: {
+    brand: 'AS Colour',
+    model: '5001',
+    material: '100% 精梳棉',
+    weight: '180 g/m²',
+    fit: '常规版型',
+    colorCount: 18,
+    sizes: ['XS', 'S', 'M', 'L', 'XL', '2XL'],
+    colors: ['黑色', '米白', '藏青', '灰色'],
+    printAreas: ['正面', '背面', '左胸'],
+    highlights: ['柔软水洗手感', '多品类共用同一版型体系', '适合系列化上新'],
+    description: '日常穿着的服饰系列，版型稳定、尺码齐全，适合按系列开发周边；印花位置以供应商目录为准。'
+  },
+  水杯: {
+    brand: 'Printful',
+    model: '11oz',
+    material: '陶瓷（可用洗碗机与微波炉）',
+    weight: '11oz / 15oz',
+    fit: '常规杯型',
+    colorCount: 3,
+    sizes: ['11oz', '15oz'],
+    colors: ['白色', '黑色', '双色'],
+    printAreas: ['正面', '背面', '环绕'],
+    highlights: ['耐高温陶瓷，图案不易脱落', '杯身留白适中，适合照片与文字', '可单个起订，无需备货'],
+    description: '经典陶瓷杯型，杯身留白适合照片与文字排版；可单件起订，运输包装由供应商负责。'
+  },
+  墙面装饰: {
+    brand: 'Gelato',
+    model: 'Premium Matte',
+    material: '200 g/m² 哑光艺术纸 / 帆布',
+    weight: '200 g/m²',
+    fit: '标准画幅',
+    colorCount: 0,
+    sizes: ['A3', 'A2', 'A1'],
+    colors: [],
+    printAreas: ['整幅'],
+    highlights: ['哑光纸面，减少反光', '色彩还原稳定，适合摄影作品', '可按尺寸与画框组合销售'],
+    description: '哑光材质输出，色彩过渡自然，适合摄影、插画与海报设计；可与画框组合成套装销售。'
+  },
+  配件: {
+    brand: 'Printify',
+    model: 'One Size',
+    material: '棉帆布 / 皮革 / 硅胶',
+    weight: '常规配件',
+    fit: '均码',
+    colorCount: 8,
+    sizes: ['均码', '多种尺寸'],
+    colors: ['黑色', '米白', '藏青'],
+    printAreas: ['正面', '背面'],
+    highlights: ['小件易起量，适合搭配主推款', '印刷面积较小，适合标识与短句', '包装轻便，跨境运费友好'],
+    description: '配件类客单价低、复购高，适合作为主推款的搭配组合；可选颜色与印刷位置以供应商目录为准。'
+  },
+  家居生活: {
+    brand: 'Pic The Gift',
+    model: 'Standard',
+    material: '聚酯纤维 / 羊羔绒 / 有机棉',
+    weight: '按品类而定',
+    fit: '多尺寸',
+    colorCount: 6,
+    sizes: ['40 × 40 cm', '130 × 150 cm'],
+    colors: ['白色', '米白', '灰色'],
+    printAreas: ['正面', '整面'],
+    highlights: ['整面印花，适合照片与拼贴', '家居场景溢价空间更大', '包装体积较大，注意运费核算'],
+    description: '家居用品以整面印花为主，适合照片、插画与节日主题；生产与运输周期略长，建议提前准备尺寸说明。'
+  },
+  礼品: {
+    brand: 'Teelaunch',
+    model: 'Standard',
+    material: '陶瓷 / 纸品 / 木作',
+    weight: '按品类而定',
+    fit: '多尺寸',
+    colorCount: 5,
+    sizes: ['均码', '多种尺寸'],
+    colors: ['白色', '原木色', '黑色'],
+    printAreas: ['正面', '整面'],
+    highlights: ['节日与纪念场景需求集中', '适合小批量定制与礼盒组合', '可按活动节点做主题上新'],
+    description: '礼品类适合节点营销与纪念场景，通常以小批量定制为主；不同材质上色表现差异较大，建议先打样。'
+  }
+}
+
+// 空白衫品牌按供应商区分
+const adminBlankBrands = {
+  Printful: { T恤: ['Bella + Canvas', '3001'], 卫衣: ['Gildan', '18500'] },
+  Printify: { T恤: ['Gildan', '64000'], 卫衣: ['Gildan', '18500'] },
+  'Simple Print': { T恤: ['AS Colour', '5001'] },
+  Gelato: { T恤: ['Stanley/Stella', 'Creator'] },
+  SPOD: { T恤: ['Stanley/Stella', 'Creator'] },
+  Apliiq: { 服装: ['AS Colour', '5001'] }
+}
+
+export function buildAdminProductSpecs(product) {
+  const profile = adminSpecProfiles[product.category] || adminSpecProfiles['礼品']
+  const rule = (adminBlankBrands[product.supplier] || {})[product.category]
+
+  return {
+    brand: rule ? rule[0] : profile.brand,
+    model: rule ? rule[1] : profile.model,
+    material: profile.material,
+    weight: profile.weight,
+    fit: profile.fit,
+    colorCount: profile.colorCount,
+    sizes: [...profile.sizes],
+    colors: [...profile.colors],
+    printAreas: [...profile.printAreas],
+    highlights: [...profile.highlights],
+    description: `${profile.description} 数据同步自供应商公开产品目录，价格与库存以供应商页面为准。`
+  }
+}
+
 export const adminActivities = [
   { who: 'Lena', action: '更新了 Gelato 的配送国家与生产成本', time: '2 小时前' },
   { who: 'Marco', action: '新增供应商 Pic The Gift 的 3 个产品', time: '5 小时前' },
@@ -265,7 +402,7 @@ export const productCategoryOptions = supplierCategoryOptions
 
 export const productColorOptions = ['白色', '黑色', '米白', '藏青', '灰色', '红色']
 
-export const productSizeOptions = ['XS', 'S', 'M', 'L', 'XL', '2XL', '3XL']
+export const productSizeOptions = ['XS', 'S', 'M', 'L', 'XL', '2XL', '3XL', '4XL', '5XL']
 
 // 帮助中心：分类与问题
 export const adminHelpCategories = [

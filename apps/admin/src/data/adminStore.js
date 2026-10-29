@@ -9,7 +9,8 @@ import {
   adminCrawlTasks,
   adminCrawlItems,
   adminCrawlDomains,
-  adminCrawlLogs
+  adminCrawlLogs,
+  buildAdminProductSpecs
 } from './adminData'
 
 const KEYS = {
@@ -87,13 +88,20 @@ export function removeSupplier(id) {
 
 /* ---------- 产品 ---------- */
 
+// 补齐第三方产品规格：旧数据或手动新建的产品按品类模板生成，保证详情页信息完整
+const withProductSpecs = (row) => ({
+  ...row,
+  thirdParty: row.thirdParty || buildAdminProductSpecs(row)
+})
+
 export function listProducts() {
-  return readList(KEYS.products, adminProducts)
+  return readList(KEYS.products, adminProducts).map(withProductSpecs)
 }
 
 export function saveProducts(rows) {
-  write(KEYS.products, rows)
-  return rows
+  const next = rows.map(withProductSpecs)
+  write(KEYS.products, next)
+  return next
 }
 
 export function findProduct(id) {

@@ -28,9 +28,6 @@
 
           <div class="overview-body">
             <h2>产品信息</h2>
-            <p class="desc">
-              {{ row.description || '暂无产品描述，可在编辑页补充面料、克重与印刷卖点。' }}
-            </p>
 
             <dl class="facts">
               <div><dt>产品编号</dt><dd>{{ row.sku || row.id }}</dd></div>
@@ -43,9 +40,26 @@
           </div>
         </div>
 
-        <div class="panel spec-panel">
+        <div class="panel">
           <header class="panel-head">
-            <h2>价格与规格</h2>
+            <h2>产品亮点</h2>
+            <span class="hint">同步自 {{ sourceSite }}</span>
+          </header>
+
+          <p class="desc">{{ tp.description || '暂无产品描述，可重新同步或在编辑页补充。' }}</p>
+
+          <ul class="highlight-list">
+            <li v-for="item in highlights" :key="item">
+              <i class="el-icon-check"></i>
+              {{ item }}
+            </li>
+            <li v-if="!highlights.length" class="highlight-empty">暂无亮点信息</li>
+          </ul>
+        </div>
+
+        <div class="panel">
+          <header class="panel-head">
+            <h2>价格与毛利</h2>
             <span class="hint">基础价为供应商结算价，不含运费</span>
           </header>
 
@@ -66,20 +80,46 @@
               <small>按零售价计算</small>
             </div>
           </div>
+        </div>
+
+        <div class="panel">
+          <header class="panel-head">
+            <h2>规格参数</h2>
+            <span class="hint">来自第三方产品页</span>
+          </header>
+
+          <dl class="spec-table">
+            <div><dt>品牌</dt><dd>{{ tp.brand || '—' }}</dd></div>
+            <div><dt>型号 / 款式</dt><dd>{{ tp.model || '—' }}</dd></div>
+            <div><dt>材质</dt><dd>{{ tp.material || '—' }}</dd></div>
+            <div><dt>克重 / 容量</dt><dd>{{ tp.weight || '—' }}</dd></div>
+            <div><dt>版型</dt><dd>{{ tp.fit || '—' }}</dd></div>
+            <div><dt>可选颜色</dt><dd>{{ specColorCount ? specColorCount + ' 种' : '—' }}</dd></div>
+            <div><dt>可选尺码</dt><dd>{{ specSizes.join(' / ') || '—' }}</dd></div>
+            <div><dt>印刷区域</dt><dd>{{ specPrintAreas.join(' / ') || '—' }}</dd></div>
+          </dl>
 
           <div class="spec-row">
             <h3>可选颜色</h3>
             <div class="chips">
-              <span v-for="item in colors" :key="item">{{ item }}</span>
-              <em v-if="!colors.length">未配置</em>
+              <span v-for="item in specColors" :key="item">{{ item }}</span>
+              <em v-if="!specColors.length">以供应商目录为准</em>
             </div>
           </div>
 
           <div class="spec-row">
             <h3>可选尺码</h3>
             <div class="chips">
-              <span v-for="item in sizes" :key="item">{{ item }}</span>
-              <em v-if="!sizes.length">未配置</em>
+              <span v-for="item in specSizes" :key="item">{{ item }}</span>
+              <em v-if="!specSizes.length">以供应商目录为准</em>
+            </div>
+          </div>
+
+          <div class="spec-row">
+            <h3>印刷区域</h3>
+            <div class="chips">
+              <span v-for="item in specPrintAreas" :key="item">{{ item }}</span>
+              <em v-if="!specPrintAreas.length">以供应商确认为准</em>
             </div>
           </div>
         </div>
@@ -209,11 +249,25 @@ export default {
       if (!this.row || !this.retailPrice) return 0
       return Math.round(((this.retailPrice - this.row.price) / this.retailPrice) * 100)
     },
-    colors() {
-      return (this.row && this.row.colors) || []
+    tp() {
+      return (this.row && this.row.thirdParty) || {}
     },
-    sizes() {
-      return (this.row && this.row.sizes) || []
+    highlights() {
+      return this.tp.highlights || []
+    },
+    specColors() {
+      const colors = this.row && this.row.colors
+      return (colors && colors.length ? colors : this.tp.colors) || []
+    },
+    specSizes() {
+      const sizes = this.row && this.row.sizes
+      return (sizes && sizes.length ? sizes : this.tp.sizes) || []
+    },
+    specPrintAreas() {
+      return this.tp.printAreas || []
+    },
+    specColorCount() {
+      return this.specColors.length || this.tp.colorCount || 0
     },
     related() {
       if (!this.row) return []
@@ -386,11 +440,85 @@ export default {
   }
 }
 
+.main-col > .panel:not(.overview) {
+  padding: 20px 22px 18px;
+}
+
 .desc {
   margin-bottom: 16px;
   font-size: 12.5px;
   line-height: 1.75;
   color: $muted;
+}
+
+.highlight-list {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+
+  @include down(760px) {
+    grid-template-columns: 1fr;
+  }
+
+  li {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 12px 14px;
+    border: 1px solid $line;
+    border-radius: $radius-sm;
+    background: #fbfbff;
+    font-size: 12px;
+    line-height: 1.6;
+    color: $ink-soft;
+  }
+
+  i {
+    margin-top: 3px;
+    color: $success;
+    font-size: 12px;
+    flex-shrink: 0;
+  }
+}
+
+.highlight-empty {
+  color: $muted;
+}
+
+.spec-table {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1px;
+  overflow: hidden;
+  border: 1px solid $line;
+  border-radius: $radius;
+  background: $line;
+
+  @include down(620px) {
+    grid-template-columns: 1fr;
+  }
+
+  > div {
+    padding: 12px 16px;
+    background: #fff;
+  }
+
+  dt {
+    margin-bottom: 3px;
+    font-size: 10.5px;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: $muted;
+  }
+
+  dd {
+    margin: 0;
+    font-size: 12.5px;
+    font-weight: 600;
+    color: $ink;
+    word-break: break-word;
+  }
 }
 
 .facts {
