@@ -286,6 +286,7 @@ export default {
         printArea: this.form.printArea,
         printMethod: this.form.printMethod,
         status,
+        source: this.form.source || null,
         updated: today()
       }
 

@@ -46,6 +46,8 @@ npm run preview:admin
 | `/suppliers` | 供应商目录 | 关键词搜索 + 品类/配送/集成筛选 + 4 种排序 + URL 深链 + 空状态 + 移动端筛选抽屉 |
 | `/suppliers/:id` | 供应商详情 | 网站截图、Hero 与快捷事实、评分、产品清单、印刷工艺、集成、配送、工厂、样品表单、相似供应商 |
 | `/suppliers/:id/products` | 供应商产品目录 | 对应供应商官网的产品列表：搜索、品类筛选、排序、深链高亮（`?p=`） |
+| `/products` | 产品目录 | 关键词搜索 + 工厂/品类筛选 + 4 种排序 + 分组浏览 + 加载更多，卡片可进入产品详情 |
+| `/products/:id` | 产品详情 | 产品视觉与大图信息、价格与规格、印刷与履约、供应商卡、同工厂产品与同类产品推荐 |
 
 ## 后台端页面（`apps/admin`）
 
@@ -56,8 +58,9 @@ npm run preview:admin
 | `/suppliers` | 供应商管理 | 搜索、状态筛选、目录展示开关、分页、跳转业务端详情 |
 | `/suppliers/new` | 创建供应商 | 基础信息、品类与工艺、集成平台、生产配送、状态与卡片预览、表单校验 |
 | `/suppliers/:id/edit` | 编辑供应商 | 回填现有信息、保存修改、删除供应商 |
-| `/products` | 产品目录 | 搜索、供应商/品类筛选、上架开关、分页、跳转业务端产品列表 |
+| `/products` | 产品目录 | 搜索、供应商/品类筛选、上架开关、分页、进入详情 |
 | `/products/new` | 创建产品 | 供应商与品类选择、价格与履约、颜色/尺码规格、印刷工艺、上架状态与卡片预览 |
+| `/products/:id` | 产品详情 | 产品信息、价格与毛利率、颜色/尺码规格、采集来源、目录状态开关、供应商与同供应商产品 |
 | `/products/:id/edit` | 编辑产品 | 回填现有信息、保存修改、删除产品 |
 | `/extension` | 谷歌插件管理 | 插件连接状态、接口密钥、采集任务配置与启停、采集结果审核入库、授权域名、运行日志 |
 | `/help` | 帮助中心管理 | 分类增删改、问题增删改、发布/下架、搜索筛选、置顶排序、支持入口设置 |
@@ -84,7 +87,8 @@ npm run preview:admin
 │   │       ├── data/            # content、suppliers、supplierDetails、products
 │   │       ├── utils/           # supplierQuery、debounce、nav、visualSearch
 │   │       ├── styles/          # variables.scss、index.scss
-│   │       ├── views/           # HomePage、SuppliersPage、SupplierDetailPage、SupplierProductsPage…
+│   │       ├── views/           # HomePage、SuppliersPage、SupplierDetailPage、SupplierProductsPage、
+│   │       │                    # ProductsPage、ProductDetailPage、HelpCenterPage…
 │   │       └── components/      # AppHeader、HeroSearch、ImageSearchPanel、SupplierCard、ProductCard…
 │   ├── api                      # 以图搜图接口：vitePlugin（开发中间件）/ server（独立服务）
 │   │   ├── visualSearchRoute.js # 入参校验、限流
@@ -101,7 +105,7 @@ npm run preview:admin
 │           ├── data/            # adminData.js（演示数据）、adminStore.js（localStorage 数据层）
 │           ├── styles/          # variables.scss、index.scss
 │           ├── views/           # LoginPage、DashboardPage、Suppliers/Products/HelpCenter/Extension AdminPage、
-│           │                    # SupplierFormPage、ProductFormPage
+│           │                    # SupplierFormPage、ProductFormPage、ProductDetailAdminPage
 │           └── components/      # StatusTag
 ```
 

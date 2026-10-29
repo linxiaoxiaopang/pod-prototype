@@ -4,14 +4,20 @@
     class="product"
     :class="{ 'is-highlight': highlight }"
   >
-    <div class="product-media">
+    <router-link
+      class="product-media"
+      :to="detailPath"
+      :aria-label="`查看 ${product.name} 的产品详情`"
+    >
       <ProductThumb :shape="product.shape" :accent="product.accent" :label="product.name" />
       <span v-if="product.badge" class="product-badge">{{ product.badge }}</span>
-    </div>
+    </router-link>
 
     <div class="product-body">
       <span class="product-category">{{ product.category }}</span>
-      <h3>{{ product.name }}</h3>
+      <h3>
+        <router-link :to="detailPath">{{ product.name }}</router-link>
+      </h3>
       <p class="product-meta">
         {{ product.options }}
         <em>· {{ product.productionDays }} 天生产</em>
@@ -19,16 +25,22 @@
 
       <div class="product-foot">
         <span class="product-price">${{ product.price.toFixed(2) }}</span>
-        <a
-          class="product-link"
-          :href="product.supplierWebsite"
-          target="_blank"
-          rel="noopener"
-          :aria-label="`在 ${host} 查看 ${product.name}`"
-        >
-          前往 {{ host }} 查看
-          <i class="el-icon-top-right"></i>
-        </a>
+        <div class="product-links">
+          <router-link class="product-link" :to="detailPath">
+            详情
+            <i class="el-icon-right"></i>
+          </router-link>
+          <a
+            class="product-source"
+            :href="product.supplierWebsite"
+            target="_blank"
+            rel="noopener"
+            :aria-label="`在 ${host} 查看 ${product.name}`"
+          >
+            官网
+            <i class="el-icon-top-right"></i>
+          </a>
+        </div>
       </div>
     </div>
   </article>
@@ -50,6 +62,9 @@ export default {
         .replace(/^https?:\/\//, '')
         .replace(/^www\./, '')
         .replace(/\/$/, '')
+    },
+    detailPath() {
+      return `/products/${this.product.id}`
     }
   }
 }
@@ -81,8 +96,10 @@ export default {
 
 .product-media {
   position: relative;
+  display: block;
   aspect-ratio: 4 / 3.4;
   padding: 14px 18px 4px;
+  color: inherit;
 }
 
 .product-badge {
@@ -113,6 +130,15 @@ export default {
     line-height: 1.3;
     letter-spacing: -0.02em;
     margin: 2px 0 5px;
+
+    a {
+      color: inherit;
+      transition: color 0.2s $ease;
+
+      &:hover {
+        color: $primary;
+      }
+    }
   }
 }
 
@@ -151,10 +177,16 @@ export default {
   color: $ink;
 }
 
+.product-links {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
 .product-link {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
+  gap: 3px;
   font-size: 12px;
   font-weight: 700;
   color: $primary;
@@ -166,6 +198,24 @@ export default {
 
   i {
     font-size: 11px;
+  }
+}
+
+.product-source {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: $muted;
+  white-space: nowrap;
+
+  &:hover {
+    color: $ink-soft;
+  }
+
+  i {
+    font-size: 10px;
   }
 }
 </style>

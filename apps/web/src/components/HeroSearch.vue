@@ -124,12 +124,10 @@ export default {
       const product = bestProductMatch(raw)
       if (product) {
         this.$message({
-          message: `已在 ${product.supplierName} 的产品目录中找到「${product.name}」。`,
+          message: `已找到「${product.name}」，正在打开产品详情。`,
           type: 'success'
         })
-        this.$router
-          .push({ path: `/suppliers/${product.supplierId}/products`, query: { p: product.id } })
-          .catch(() => {})
+        this.$router.push(`/products/${product.id}`).catch(() => {})
         return
       }
 

@@ -74,8 +74,8 @@
 
         <el-table-column label="操作" width="120" align="right">
           <template slot-scope="{ row }">
+            <button class="link" type="button" @click="detail(row)">查看</button>
             <button class="link" type="button" @click="edit(row)">编辑</button>
-            <button class="link" type="button" @click="preview(row)">预览</button>
           </template>
         </el-table-column>
       </el-table>
@@ -96,8 +96,6 @@
 <script>
 import StatusTag from '@/components/StatusTag.vue'
 import { listProducts, saveProducts } from '@/data/adminStore'
-
-const webUrl = import.meta.env.VITE_WEB_URL || 'http://localhost:5173'
 
 export default {
   name: 'ProductsAdminPage',
@@ -153,11 +151,11 @@ export default {
       saveProducts(this.rows)
       this.$message.success(`${row.name} 已${enabled ? '上架' : '下架'}`)
     },
+    detail(row) {
+      this.$router.push(`/products/${row.id}`).catch(() => {})
+    },
     edit(row) {
       this.$router.push(`/products/${row.id}/edit`).catch(() => {})
-    },
-    preview(row) {
-      window.open(`${webUrl}/#/products?q=${encodeURIComponent(row.name)}`, '_blank', 'noopener')
     },
     createNew() {
       this.$router.push('/products/new').catch(() => {})

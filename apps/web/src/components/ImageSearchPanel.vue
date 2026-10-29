@@ -195,7 +195,7 @@
                     <li v-for="item in supplier.items" :key="item.product.id">
                       <router-link
                         class="match-item"
-                        :to="`/suppliers/${supplier.supplierId}/products?p=${item.product.id}`"
+                        :to="`/products/${item.product.id}`"
                         @click.native="close"
                       >
                         <span class="item-thumb">

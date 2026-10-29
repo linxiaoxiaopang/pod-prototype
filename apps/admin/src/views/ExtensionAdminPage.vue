@@ -620,6 +620,7 @@ export default {
         printArea: '正面',
         printMethod: 'DTG',
         status: 'draft',
+        source: { type: 'extension', site: row.site, url: row.url, collectedAt: row.collectedAt },
         updated: today()
       })
     },

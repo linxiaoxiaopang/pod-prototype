@@ -65,6 +65,12 @@ const router = new Router({
           meta: { title: '编辑产品', crumb: '产品' }
         },
         {
+          path: 'products/:id',
+          name: 'product-detail-admin',
+          component: () => import('@/views/ProductDetailAdminPage.vue'),
+          meta: { title: '产品详情', crumb: '产品' }
+        },
+        {
           path: 'extension',
           name: 'extension',
           component: () => import('@/views/ExtensionAdminPage.vue'),

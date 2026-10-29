@@ -41,7 +41,7 @@ const siteSearchIndex = [
   { value: 'Apliiq', group: '供应商', to: '/suppliers/apliiq' }
 ]
 
-// 产品索引：同款产品只保留一条联想（取价格最低的供应商），直接跳到其产品目录并定位
+// 产品索引：同款产品只保留一条联想（取价格最低的供应商），直接打开该产品详情
 const productGroups = products.reduce((map, product) => {
   const entry = map.get(product.name)
   if (!entry) {
@@ -57,7 +57,7 @@ const productSearchIndex = [...productGroups.values()].map(({ product, count }) 
   value: product.name,
   group: '产品',
   meta: count > 1 ? `${product.supplierName} 等 ${count} 家` : product.supplierName,
-  to: `/suppliers/${product.supplierId}/products?p=${product.id}`
+  to: `/products/${product.id}`
 }))
 
 export const searchIndex = [...siteSearchIndex, ...productSearchIndex]
