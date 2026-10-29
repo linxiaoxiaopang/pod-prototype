@@ -8,10 +8,16 @@ export const brand = {
 }
 
 export const navLinks = [
-  { label: '供应商', to: '/suppliers' },
-  { label: '产品', to: '/products' },
-  { label: '帮助中心', to: '/help' }
+  { label: '供应商', labelEn: 'Suppliers', to: '/suppliers' },
+  { label: '产品', labelEn: 'Products', to: '/products' },
+  { label: '帮助中心', labelEn: 'Help Center', to: '/help' }
 ]
+
+// 导航语言切换（演示）：仅切换导航与头部按钮文案
+export const headerCopy = {
+  zh: { search: '搜索', cta: '浏览供应商', drawerCta: '浏览供应商' },
+  en: { search: 'Search', cta: 'Browse suppliers', drawerCta: 'Browse suppliers' }
+}
 
 export const hero = {
   titleBefore: '把',

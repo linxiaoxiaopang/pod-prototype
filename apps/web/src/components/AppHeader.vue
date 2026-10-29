@@ -19,7 +19,7 @@
       <nav class="nav" aria-label="主导航">
         <router-link
           v-for="item in navLinks"
-          :key="item.label"
+          :key="item.to"
           class="nav-link"
           :to="item.to"
           active-class="is-active"
@@ -30,14 +30,46 @@
       </nav>
 
       <div class="header-actions">
+        <el-dropdown trigger="click" class="lang-dropdown" @command="setLocale">
+          <button class="lang-switch" type="button" aria-label="切换语言">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.8" />
+              <path
+                d="M3.2 9.4h17.6M3.2 14.6h17.6M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+                stroke-linecap="round"
+              />
+            </svg>
+            <span>{{ locale === 'en' ? 'EN' : '中文' }}</span>
+            <i class="el-icon-arrow-down"></i>
+          </button>
+
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item command="zh">
+              <span class="lang-option">
+                简体中文
+                <i v-if="locale === 'zh'" class="el-icon-check"></i>
+              </span>
+            </el-dropdown-item>
+            <el-dropdown-item command="en">
+              <span class="lang-option">
+                English
+                <i v-if="locale === 'en'" class="el-icon-check"></i>
+              </span>
+            </el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
+
         <button class="search-entry" type="button" @click="focusSearch">
           <i class="el-icon-search"></i>
-          <span>搜索</span>
+          <span>{{ copy.search }}</span>
           <kbd>/</kbd>
         </button>
 
         <el-button type="primary" round class="header-cta" @click="$router.push('/suppliers')">
-          浏览供应商
+          {{ copy.cta }}
         </el-button>
 
         <button class="burger" aria-label="打开菜单" @click="drawer = true">
@@ -54,13 +86,20 @@
       </div>
     </div>
 
-    <HeaderDrawer :visible.sync="drawer" :nav-links="navLinks" :brand="brand" />
+    <HeaderDrawer
+      :visible.sync="drawer"
+      :nav-links="navLinks"
+      :cta-label="copy.drawerCta"
+      :brand="brand"
+    />
   </header>
 </template>
 
 <script>
 import HeaderDrawer from './HeaderDrawer.vue'
-import { brand, navLinks } from '@/data/content'
+import { brand, navLinks as baseNavLinks, headerCopy } from '@/data/content'
+
+const LOCALE_KEY = 'pod-locale'
 
 export default {
   name: 'AppHeader',
@@ -68,9 +107,20 @@ export default {
   data() {
     return {
       brand,
-      navLinks,
       drawer: false,
-      scrolled: false
+      scrolled: false,
+      locale: window.localStorage.getItem(LOCALE_KEY) === 'en' ? 'en' : 'zh'
+    }
+  },
+  computed: {
+    navLinks() {
+      return baseNavLinks.map((item) => ({
+        ...item,
+        label: this.locale === 'en' ? item.labelEn : item.label
+      }))
+    },
+    copy() {
+      return headerCopy[this.locale] || headerCopy.zh
     }
   },
   mounted() {
@@ -83,6 +133,19 @@ export default {
     window.removeEventListener('keydown', this.onKeydown)
   },
   methods: {
+    setLocale(locale) {
+      if (!headerCopy[locale] || locale === this.locale) return
+      this.locale = locale
+      try {
+        window.localStorage.setItem(LOCALE_KEY, locale)
+      } catch (e) {
+        // 隐私模式下写入失败时保持当前会话状态
+      }
+      this.$message({
+        message: locale === 'en' ? '已切换为 English（仅导航演示）' : '已切换为简体中文',
+        type: 'success'
+      })
+    },
     goHome(e) {
       this.drawer = false
       // 已在首页时点击 logo 直接回到顶部，避免重复导航
@@ -249,6 +312,64 @@ export default {
   margin-left: auto;
 }
 
+.lang-dropdown {
+  display: inline-flex;
+}
+
+.lang-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 38px;
+  padding: 0 11px;
+  border: 1px solid $line;
+  border-radius: 10px;
+  background: #fff;
+  font-family: $font;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: $ink-soft;
+  cursor: pointer;
+  transition: border-color 0.2s $ease, background 0.2s $ease, color 0.2s $ease;
+
+  svg {
+    width: 15px;
+    height: 15px;
+    color: $muted;
+    transition: color 0.2s $ease;
+  }
+
+  i {
+    font-size: 10px;
+    color: $muted;
+  }
+
+  &:hover {
+    border-color: rgba(91, 75, 255, 0.4);
+    background: $bg-soft;
+    color: $primary;
+
+    svg,
+    i {
+      color: $primary;
+    }
+  }
+}
+
+.lang-option {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  min-width: 104px;
+  font-size: 13px;
+
+  i {
+    color: $primary;
+    font-size: 12px;
+  }
+}
+
 .search-entry {
   display: flex;
   align-items: center;
@@ -332,6 +453,14 @@ export default {
 
   .logo-text {
     font-size: 14px;
+  }
+
+  .lang-switch {
+    padding: 0 8px;
+
+    svg {
+      display: none;
+    }
   }
 }
 </style>

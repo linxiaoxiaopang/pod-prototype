@@ -52,6 +52,9 @@ npm run preview:admin
 > 产品详情的字段结构参照供应商官网产品页（例如 Printful 的 Bella + Canvas 3001 页面）；
 > 演示数据在 `apps/web/src/data/products.js` 中按品类模板生成，并标注来源站点、同步时间与原始页面链接。
 > 真实接入时，这些字段由后台插件采集后写入，业务端只负责展示与跳转。
+>
+> 顶部导航右侧提供中英文切换（`简体中文` / `English`）：当前仅切换导航 Tab、搜索与按钮文案，
+> 作为国际化演示，页面正文仍为中文；选择结果保存在 `localStorage` 的 `pod-locale`。
 
 ## 后台端页面（`apps/admin`）
 

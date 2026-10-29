@@ -28,7 +28,7 @@
       </ul>
 
       <el-button type="primary" round class="drawer-cta" @click="goToSuppliers">
-        浏览供应商
+        {{ ctaLabel }}
       </el-button>
     </div>
   </el-drawer>
@@ -40,6 +40,7 @@ export default {
   props: {
     visible: { type: Boolean, default: false },
     navLinks: { type: Array, default: () => [] },
+    ctaLabel: { type: String, default: '浏览供应商' },
     brand: { type: Object, required: true }
   },
   methods: {
