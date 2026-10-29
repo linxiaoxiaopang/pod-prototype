@@ -1,0 +1,75 @@
+name: Deploy static site to GitHub Pages
+
+on:
+  push:
+    branches:
+      - master
+      - dev-v1.0.0
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: github-pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: Build site
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build web app
+        run: npm run build:web
+
+      - name: Build admin app
+        run: npm run build:admin
+
+      - name: Assemble site
+        run: |
+          set -eu
+          mkdir -p site/web site/admin
+          cp deploy/index.html site/index.html
+          cp -r apps/web/dist/. site/web/
+          cp -r apps/admin/dist/. site/admin/
+          cp deploy/404.html site/404.html
+          touch site/.nojekyll
+          find site -maxdepth 2 -type d
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+        with:
+          # 首次运行时自动为仓库创建 Pages 站点（需仓库管理员权限）
+          enablement: true
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+  deploy:
+    name: Deploy to GitHub Pages
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@v4

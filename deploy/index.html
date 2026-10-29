@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>POD 供应商目录 · 在线预览</title>
+    <meta
+      name="description"
+      content="POD 供应商目录原型的在线预览入口：业务端（供应商目录 / 对比 / 成本指数）与运营后台。"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --primary: #5b4bff;
+        --primary-dark: #4030d8;
+        --primary-soft: #eeeaff;
+        --accent: #ff6b35;
+        --accent-soft: #fff0e9;
+        --success: #16b981;
+        --ink: #0d1030;
+        --ink-soft: #4a4f6b;
+        --muted: #858aa3;
+        --line: #e7e9f4;
+        --bg: #ffffff;
+        --bg-soft: #f6f7fd;
+        --radius: 18px;
+        --radius-lg: 28px;
+        --shadow: 0 20px 44px -22px rgba(13, 16, 48, 0.32);
+        --shadow-lg: 0 44px 90px -46px rgba(13, 16, 48, 0.5);
+        --font: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI',
+          'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: var(--font);
+        color: var(--ink-soft);
+        background:
+          radial-gradient(1200px 600px at 12% -10%, rgba(91, 75, 255, 0.14), transparent 62%),
+          radial-gradient(900px 520px at 92% 4%, rgba(255, 107, 53, 0.12), transparent 60%),
+          var(--bg-soft);
+        min-height: 100vh;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      .shell {
+        width: 100%;
+        max-width: 1080px;
+        margin: 0 auto;
+        padding: 72px 24px 64px;
+      }
+
+      .badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 7px 14px;
+        border-radius: 999px;
+        border: 1px solid rgba(91, 75, 255, 0.24);
+        background: rgba(255, 255, 255, 0.72);
+        color: var(--primary-dark);
+        font-size: 13px;
+        font-weight: 700;
+        letter-spacing: 0.02em;
+      }
+
+      .badge .dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: var(--success);
+        box-shadow: 0 0 0 4px rgba(22, 185, 129, 0.16);
+      }
+
+      h1 {
+        margin: 22px 0 14px;
+        font-size: clamp(32px, 5vw, 52px);
+        line-height: 1.12;
+        letter-spacing: -0.03em;
+        color: var(--ink);
+        font-weight: 800;
+      }
+
+      h1 span {
+        background: linear-gradient(100deg, var(--primary), var(--accent));
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+      }
+
+      .lede {
+        max-width: 620px;
+        font-size: 16px;
+        line-height: 1.7;
+        color: var(--ink-soft);
+      }
+
+      .cards {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 22px;
+        margin-top: 44px;
+      }
+
+      .card {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        padding: 30px 28px 26px;
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--line);
+        background: #fff;
+        box-shadow: var(--shadow);
+        transition: transform 0.28s cubic-bezier(0.22, 0.61, 0.36, 1),
+          box-shadow 0.28s cubic-bezier(0.22, 0.61, 0.36, 1), border-color 0.28s;
+        overflow: hidden;
+      }
+
+      .card::after {
+        content: '';
+        position: absolute;
+        inset: auto -30% -60% auto;
+        width: 320px;
+        height: 320px;
+        border-radius: 50%;
+        background: radial-gradient(circle, rgba(91, 75, 255, 0.1), transparent 68%);
+        pointer-events: none;
+      }
+
+      .card:hover {
+        transform: translateY(-4px);
+        box-shadow: var(--shadow-lg);
+        border-color: rgba(91, 75, 255, 0.28);
+      }
+
+      .card.admin::after {
+        background: radial-gradient(circle, rgba(255, 107, 53, 0.12), transparent 68%);
+      }
+
+      .icon {
+        width: 46px;
+        height: 46px;
+        border-radius: 14px;
+        display: grid;
+        place-items: center;
+        font-size: 21px;
+        background: var(--primary-soft);
+        color: var(--primary);
+      }
+
+      .card.admin .icon {
+        background: var(--accent-soft);
+        color: var(--accent);
+      }
+
+      .card h2 {
+        margin: 18px 0 8px;
+        font-size: 21px;
+        letter-spacing: -0.01em;
+        color: var(--ink);
+        font-weight: 800;
+      }
+
+      .card p {
+        margin: 0;
+        font-size: 14.5px;
+        line-height: 1.65;
+      }
+
+      .tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin: 16px 0 22px;
+        padding: 0;
+        list-style: none;
+      }
+
+      .tags li {
+        padding: 5px 11px;
+        border-radius: 999px;
+        background: var(--bg-soft);
+        border: 1px solid var(--line);
+        font-size: 12.5px;
+        font-weight: 600;
+        color: var(--ink-soft);
+      }
+
+      .enter {
+        margin-top: auto;
+        display: inline-flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 13px 18px;
+        border-radius: 14px;
+        background: var(--primary);
+        color: #fff;
+        font-size: 14.5px;
+        font-weight: 700;
+        text-decoration: none;
+        transition: background 0.2s, transform 0.2s;
+      }
+
+      .card.admin .enter {
+        background: var(--ink);
+      }
+
+      .enter:hover {
+        background: var(--primary-dark);
+      }
+
+      .card.admin .enter:hover {
+        background: #1b1f45;
+      }
+
+      .enter svg {
+        width: 16px;
+        height: 16px;
+        transition: transform 0.2s;
+      }
+
+      .enter:hover svg {
+        transform: translateX(3px);
+      }
+
+      footer {
+        margin-top: 46px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px 22px;
+        align-items: center;
+        justify-content: space-between;
+        font-size: 13px;
+        color: var(--muted);
+      }
+
+      footer a {
+        color: var(--ink-soft);
+        text-decoration: none;
+        font-weight: 600;
+      }
+
+      footer a:hover {
+        color: var(--primary);
+      }
+
+      .note {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+      }
+
+      .note::before {
+        content: '';
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: var(--accent);
+      }
+
+      @media (max-width: 760px) {
+        .shell {
+          padding: 48px 18px 44px;
+        }
+
+        .cards {
+          grid-template-columns: 1fr;
+          margin-top: 30px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="shell">
+      <span class="badge"><span class="dot"></span>静态页面在线运行</span>
+      <h1>POD 供应商目录<br /><span>原型在线预览</span></h1>
+      <p class="lede">
+        收录按需打印（POD）供应商目录、产品清单与实操指南，帮助店主与独立创作者快速筛选合适的供应商。
+        下面两个入口分别是面向用户的业务端与面向运营的管理后台，均为纯前端静态构建。
+      </p>
+
+      <div class="cards">
+        <article class="card">
+          <div class="icon" aria-hidden="true">◎</div>
+          <h2>业务端 Web</h2>
+          <p>供应商目录浏览、多维对比、成本指数与图片搜索工具站。</p>
+          <ul class="tags">
+            <li>供应商目录</li>
+            <li>产品对比</li>
+            <li>成本指数</li>
+            <li>图片搜索</li>
+          </ul>
+          <a class="enter" href="./web/">
+            <span>进入业务端</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M5 12h13" />
+              <path d="m12 5 7 7-7 7" />
+            </svg>
+          </a>
+        </article>
+
+        <article class="card admin">
+          <div class="icon" aria-hidden="true">⌘</div>
+          <h2>运营后台 Admin</h2>
+          <p>供应商、产品与内容运营管理台，含登录与列表维护流程。</p>
+          <ul class="tags">
+            <li>供应商管理</li>
+            <li>产品维护</li>
+            <li>内容运营</li>
+            <li>演示登录</li>
+          </ul>
+          <a class="enter" href="./admin/">
+            <span>进入运营后台</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M5 12h13" />
+              <path d="m12 5 7 7-7 7" />
+            </svg>
+          </a>
+        </article>
+      </div>
+
+      <footer>
+        <span class="note">由 GitHub Pages 托管的静态站点，随仓库推送自动更新</span>
+        <a href="https://github.com/linxiaoxiaopang/pod-prototype" target="_blank" rel="noopener">查看源码仓库</a>
+      </footer>
+    </main>
+  </body>
+</html>
