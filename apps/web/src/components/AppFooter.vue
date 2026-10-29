@@ -34,14 +34,47 @@
           </li>
         </ul>
       </div>
+
+      <div class="footer-col footer-contact">
+        <h4>联系方式</h4>
+        <ul>
+          <li>
+            <span class="contact-label">公司</span>
+            <span class="contact-value">{{ data.contacts.company }}</span>
+          </li>
+          <li>
+            <span class="contact-label">地址</span>
+            <span class="contact-value">{{ data.contacts.address }}</span>
+          </li>
+          <li>
+            <span class="contact-label">联系人</span>
+            <span class="contact-value">{{ data.contacts.person }}</span>
+          </li>
+          <li>
+            <span class="contact-label">邮箱</span>
+            <a :href="'mailto:' + data.contacts.email">{{ data.contacts.email }}</a>
+          </li>
+          <li>
+            <span class="contact-label">电话</span>
+            <a :href="'tel:' + data.contacts.tel">{{ data.contacts.phone }}</a>
+          </li>
+        </ul>
+      </div>
     </div>
 
     <div class="container footer-bottom">
       <p class="copyright">© 2026 PrintOnDemandBusiness.com · 独立 POD 目录</p>
 
       <div class="footer-socials">
-        <a v-for="s in data.socials" :key="s.label" href="#top" :aria-label="s.label">
-          <i :class="s.icon"></i>
+        <a
+          v-for="s in data.socials"
+          :key="s.label"
+          :href="s.href"
+          target="_blank"
+          rel="noopener"
+          :aria-label="s.label"
+        >
+          <SocialIcon :name="s.name" />
         </a>
       </div>
     </div>
@@ -55,9 +88,11 @@
 <script>
 import { brand, footer } from '@/data/content'
 import { goToSection } from '@/utils/nav'
+import SocialIcon from '@/components/SocialIcon.vue'
 
 export default {
   name: 'AppFooter',
+  components: { SocialIcon },
   data() {
     return {
       brand,
@@ -83,8 +118,8 @@ export default {
 
 .footer-top {
   display: grid;
-  grid-template-columns: 1.6fr repeat(3, 0.8fr);
-  gap: 44px;
+  grid-template-columns: 1.4fr repeat(3, 0.7fr) 1.3fr;
+  gap: 40px;
   padding-bottom: 50px;
 }
 
@@ -188,6 +223,41 @@ export default {
   }
 }
 
+.footer-contact {
+  ul {
+    gap: 12px;
+  }
+
+  li {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+
+  a {
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.72);
+    word-break: break-all;
+
+    &:hover {
+      color: #a99bff;
+    }
+  }
+}
+
+.contact-label {
+  font-size: 10.5px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.38);
+}
+
+.contact-value {
+  font-size: 13px;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.72);
+}
+
 .footer-bottom {
   display: flex;
   align-items: center;
@@ -213,13 +283,15 @@ export default {
     height: 34px;
     border-radius: 10px;
     background: rgba(255, 255, 255, 0.07);
-    color: rgba(255, 255, 255, 0.68);
-    font-size: 14px;
-    transition: background 0.25s $ease, color 0.25s $ease, transform 0.25s $ease;
+    transition: background 0.25s $ease, transform 0.25s $ease;
+
+    .social-icon {
+      width: 20px;
+      height: 20px;
+    }
 
     &:hover {
       background: $primary;
-      color: #fff;
       transform: translateY(-2px);
     }
   }
@@ -235,7 +307,7 @@ export default {
 
 @include down(1080px) {
   .footer-top {
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr;
     gap: 34px;
   }
 

@@ -20,8 +20,10 @@
       </div>
 
       <p class="faq-foot" v-reveal>
-        还在犹豫？可以先看
-        <router-link to="/suppliers">精选供应商</router-link>，
+        还想了解更多？前往
+        <router-link to="/help">帮助中心</router-link>
+        查看完整问答，或先看
+        <router-link to="/suppliers">精选供应商</router-link>
         按品类、配送覆盖与生产时效筛选后再决定。
       </p>
     </div>

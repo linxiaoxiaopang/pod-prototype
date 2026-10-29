@@ -22,6 +22,16 @@ export default new Router({
       component: () => import('@/views/SuppliersPage.vue')
     },
     {
+      path: '/products',
+      name: 'products',
+      component: () => import('@/views/ProductsPage.vue')
+    },
+    {
+      path: '/help',
+      name: 'help',
+      component: () => import('@/views/HelpCenterPage.vue')
+    },
+    {
       path: '/suppliers/:id/products',
       name: 'supplier-products',
       component: () => import('@/views/SupplierProductsPage.vue')

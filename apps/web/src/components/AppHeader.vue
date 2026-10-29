@@ -1,7 +1,7 @@
 <template>
   <header class="site-header" :class="{ 'is-solid': scrolled }">
     <div class="header-inner">
-      <a class="logo" href="#top" aria-label="PrintOnDemandBusiness">
+      <router-link class="logo" to="/" aria-label="返回首页" @click.native="goHome">
         <span class="logo-mark">
           <svg viewBox="0 0 24 24" aria-hidden="true">
             <path
@@ -14,7 +14,7 @@
           {{ brand.name }}<em>{{ brand.suffix }}</em>
           <small>{{ brand.tagline }}</small>
         </span>
-      </a>
+      </router-link>
 
       <nav class="nav" aria-label="主导航">
         <router-link
@@ -83,6 +83,14 @@ export default {
     window.removeEventListener('keydown', this.onKeydown)
   },
   methods: {
+    goHome(e) {
+      this.drawer = false
+      // 已在首页时点击 logo 直接回到顶部，避免重复导航
+      if (this.$route.path === '/') {
+        e.preventDefault()
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+      }
+    },
     onScroll() {
       this.scrolled = window.scrollY > 8
     },

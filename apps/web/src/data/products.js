@@ -1,6 +1,6 @@
 // 供应商官网产品目录（mock）：以每家供应商官网在售的 productList 词表生成，
 // 名称、品类、图形、基础价来自 catalog，价格按供应商的价格水平浮动。
-import { suppliers } from './suppliers'
+import { suppliers, supplierById, categories as supplierCategories } from './suppliers'
 import { supplierDetails } from './supplierDetails'
 
 const catalog = {
@@ -128,6 +128,81 @@ export const productCategories = (list) => {
   return seen
 }
 
+// 全站分类顺序：沿用供应商分类的定义顺序，未收录的新分类追加到末尾
+export const allProductCategories = (list = products) => {
+  const seen = productCategories(list)
+  const ordered = supplierCategories.filter((cat) => seen.includes(cat))
+  const extra = seen.filter((cat) => !supplierCategories.includes(cat))
+  return [...ordered, ...extra]
+}
+
+// 供应商数据缺失时的兜底对象，避免分组标题渲染崩溃
+const fallbackSupplier = (item) => ({
+  id: item.supplierId,
+  name: item.supplierName,
+  monogram: (item.supplierName || '?').slice(0, 2).toUpperCase(),
+  accent: item.accent || '#5b4bff',
+  location: '',
+  productionDays: item.productionDays,
+  website: item.supplierWebsite
+})
+
+// [{ supplier, products }]，按产品数量降序、同数量按名称排序
+export const groupProductsBySupplier = (list) => {
+  const map = new Map()
+  list.forEach((item) => {
+    if (!map.has(item.supplierId)) map.set(item.supplierId, [])
+    map.get(item.supplierId).push(item)
+  })
+
+  return [...map.values()]
+    .map((group) => ({
+      supplier: supplierById[group[0].supplierId] || fallbackSupplier(group[0]),
+      products: group
+    }))
+    .sort(
+      (a, b) =>
+        b.products.length - a.products.length || a.supplier.name.localeCompare(b.supplier.name)
+    )
+}
+
+// [{ category, products }]，按分类定义顺序排列
+export const groupProductsByCategory = (list) => {
+  const map = new Map()
+  list.forEach((item) => {
+    if (!map.has(item.category)) map.set(item.category, [])
+    map.get(item.category).push(item)
+  })
+
+  return allProductCategories(list)
+    .filter((category) => map.has(category))
+    .map((category) => ({ category, products: map.get(category) }))
+}
+
+// 工厂下拉选项：只保留目录中确实有产品的工厂，并带上数量
+export const productSupplierOptions = (list = products) => {
+  const counts = new Map()
+  list.forEach((item) => {
+    counts.set(item.supplierId, (counts.get(item.supplierId) || 0) + 1)
+  })
+
+  return suppliers
+    .filter((supplier) => counts.has(supplier.id))
+    .map((supplier) => ({
+      value: supplier.id,
+      label: supplier.name,
+      count: counts.get(supplier.id)
+    }))
+    .sort((a, b) => b.count - a.count || a.label.localeCompare(b.label))
+}
+
+// 页头统计条
+export const productOverview = {
+  totalProducts: products.length,
+  totalSuppliers: new Set(products.map((item) => item.supplierId)).size,
+  totalCategories: new Set(products.map((item) => item.category)).size
+}
+
 export const productSortOptions = [
   { value: 'featured', label: '推荐优先' },
   { value: 'price-asc', label: '价格从低到高' },
@@ -135,15 +210,21 @@ export const productSortOptions = [
   { value: 'name', label: '名称 A–Z' }
 ]
 
-export const searchProducts = (list, { keyword = '', category = '' } = {}) => {
+// matchSupplier 默认关闭：供应商详情页内搜索不应命中其它供应商的产品
+export const searchProducts = (
+  list,
+  { keyword = '', category = '', supplierId = '', matchSupplier = false } = {}
+) => {
   const value = keyword.trim().toLowerCase()
   return list.filter((item) => {
     if (category && item.category !== category) return false
+    if (supplierId && item.supplierId !== supplierId) return false
     if (!value) return true
     return (
       item.name.toLowerCase().includes(value) ||
       item.category.toLowerCase().includes(value) ||
-      item.variant.toLowerCase().includes(value)
+      item.variant.toLowerCase().includes(value) ||
+      (matchSupplier && item.supplierName.toLowerCase().includes(value))
     )
   })
 }
