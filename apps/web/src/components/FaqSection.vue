@@ -22,8 +22,7 @@
       <p class="faq-foot" v-reveal>
         还在犹豫？可以先看
         <router-link to="/suppliers">精选供应商</router-link>，
-        或到
-        <router-link to="/cost-index">POD 落地成本指数</router-link> 对比落地成本。
+        按品类、配送覆盖与生产时效筛选后再决定。
       </p>
     </div>
   </section>

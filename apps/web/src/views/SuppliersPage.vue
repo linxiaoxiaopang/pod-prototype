@@ -4,11 +4,7 @@
       eyebrow="供应商"
       title="供应商目录"
       desc="按品类、配送覆盖与集成方式筛选按需打印供应商，再对比产品数量与生产速度。"
-    >
-      <template #actions>
-        <el-button round @click="$router.push('/comparisons')">平台对比</el-button>
-      </template>
-    </PageHeader>
+    />
 
     <div class="container page-body">
       <aside class="sidebar">

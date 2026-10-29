@@ -27,13 +27,6 @@
         </li>
       </ul>
 
-      <div class="drawer-note">
-        <p class="drawer-label">POD 落地成本指数</p>
-        <p class="drawer-text">
-          横向对比各家供应商的热门 SKU，看谁能在最低落地成本下发货最快。
-        </p>
-      </div>
-
       <el-button type="primary" round class="drawer-cta" @click="goToSuppliers">
         浏览供应商
       </el-button>
@@ -122,28 +115,8 @@ export default {
   }
 }
 
-.drawer-note {
-  margin: 26px 0 auto;
-  padding: 16px;
-  border-radius: 14px;
-  background: $bg-soft;
-}
-
-.drawer-label {
-  font-size: 13px;
-  font-weight: 800;
-  color: $ink;
-  margin-bottom: 6px;
-}
-
-.drawer-text {
-  font-size: 12.5px;
-  line-height: 1.6;
-  color: $muted;
-}
-
 .drawer-cta {
   width: 100%;
-  margin-top: 24px;
+  margin-top: auto;
 }
 </style>

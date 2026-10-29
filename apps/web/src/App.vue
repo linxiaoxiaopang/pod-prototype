@@ -1,6 +1,5 @@
 <template>
   <div id="app">
-    <AnnouncementBar />
     <AppHeader />
     <main class="site-main">
       <router-view />
@@ -11,13 +10,12 @@
 </template>
 
 <script>
-import AnnouncementBar from './components/AnnouncementBar.vue'
 import AppHeader from './components/AppHeader.vue'
 import AppFooter from './components/AppFooter.vue'
 
 export default {
   name: 'App',
-  components: { AnnouncementBar, AppHeader, AppFooter }
+  components: { AppHeader, AppFooter }
 }
 </script>
 

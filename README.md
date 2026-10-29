@@ -5,7 +5,7 @@
 
 | 子项目 | 目录 | 说明 | 默认端口 |
 |---|---|---|---|
-| 业务端（C 端） | `apps/web` | 首页、供应商目录/详情、产品目录、平台对比、成本指数、工具 | `5173` |
+| 业务端（C 端） | `apps/web` | 首页、供应商目录/详情、产品目录 | `5173` |
 | 后台端（管理台） | `apps/admin` | 登录、运营概览、供应商/产品/对比管理、站点设置 | `5174` |
 
 两端都是独立的 Vue 2 + Vite 工程，可单独开发、构建与部署，共用同一套设计语言与依赖版本。
@@ -42,14 +42,10 @@ npm run preview:admin
 
 | 路由 | 页面 | 能力 |
 |---|---|---|
-| `/` | 首页 | 公告条、Hero 搜索联想（供应商 / 对比 / 产品）、以图搜索弹层（拖拽 / 上传 / 粘贴 + 匹配排序）、平台背书、精选供应商、订阅、文章、FAQ |
+| `/` | 首页 | Hero 搜索联想（供应商 / 产品）、以图搜索弹层（拖拽 / 上传 / 粘贴 + 匹配排序）、平台背书、精选供应商、订阅、文章、FAQ |
 | `/suppliers` | 供应商目录 | 关键词搜索 + 品类/配送/集成筛选 + 4 种排序 + URL 深链 + 空状态 + 移动端筛选抽屉 |
 | `/suppliers/:id` | 供应商详情 | 网站截图、Hero 与快捷事实、评分、产品清单、印刷工艺、集成、配送、工厂、样品表单、相似供应商 |
 | `/suppliers/:id/products` | 供应商产品目录 | 对应供应商官网的产品列表：搜索、品类筛选、排序、深链高亮（`?p=`） |
-| `/comparisons` | 平台对比 | 6 组并排字段矩阵 |
-| `/comparisons/:id` | 对比详情 | Verdict、速览表、评估维度、适用场景、Pros、结论、FAQ |
-| `/cost-index` | 成本指数 | 20 个 SKU 的最低价供应商、落地成本、生产与总时效 |
-| `/tools` | 工具目录 | 3 类工具分组 |
 
 ## 后台端页面（`apps/admin`）
 
@@ -77,7 +73,7 @@ npm run preview:admin
 │   │   └── src
 │   │       ├── App.vue / main.js
 │   │       ├── router/index.js
-│   │       ├── data/            # content、suppliers、supplierDetails、products、comparisons、costIndex
+│   │       ├── data/            # content、suppliers、supplierDetails、products
 │   │       ├── utils/           # supplierQuery、debounce、nav、visualSearch
 │   │       ├── styles/          # variables.scss、index.scss
 │   │       ├── views/           # HomePage、SuppliersPage、SupplierDetailPage、SupplierProductsPage…

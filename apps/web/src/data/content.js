@@ -4,37 +4,21 @@ import { products } from './products'
 export const brand = {
   name: 'PrintOnDemand',
   suffix: 'Business',
-  tagline: '供应商、工具与对比'
-}
-
-export const announcement = {
-  tag: '新品',
-  title: 'POD 落地成本指数',
-  desc: '横向对比多家供应商的热门 SKU，看清谁的落地成本最低、谁的交付最快。',
-  cta: '立即对比',
-  to: '/cost-index'
+  tagline: '按需打印供应商目录'
 }
 
 export const navLinks = [
-  { label: '供应商', to: '/suppliers' },
-  { label: '平台对比', to: '/comparisons' },
-  { label: '成本指数', to: '/cost-index' },
-  { label: '工具', to: '/tools' }
+  { label: '供应商', to: '/suppliers' }
 ]
 
 export const hero = {
   titleBefore: '把',
   titleHighlight: '按需打印',
   titleAfter: '生意做得更明白',
-  desc: '在选择供应商、工具或平台之前，先查一遍供应商目录、平台对比、成本数据与实操指南。',
-  placeholder: '搜索供应商、产品、工具或指南…',
+  desc: '在选择供应商之前，先查一遍供应商目录、产品清单与实操指南。',
+  placeholder: '搜索供应商、产品或指南…',
   popularLabel: '热门',
   popular: [
-    { label: 'Printful 对比 Printify', to: '/comparisons' },
-    { label: 'Printify 对比 Gelato', to: '/comparisons' },
-    { label: 'Printful 对比 Gelato', to: '/comparisons' },
-    { label: 'Etsy 对比 Redbubble', to: '/comparisons' },
-    { label: 'Shopify 对比 Etsy', to: '/comparisons' },
     { label: '亚马逊 POD', to: '/suppliers' }
   ]
 }
@@ -52,16 +36,7 @@ const siteSearchIndex = [
   { value: 'Merchize', group: '供应商', to: '/suppliers/merchize' },
   { value: 'Gooten', group: '供应商', to: '/suppliers/gooten' },
   { value: 'Teelaunch', group: '供应商', to: '/suppliers/teelaunch' },
-  { value: 'Apliiq', group: '供应商', to: '/suppliers/apliiq' },
-  { value: 'Printful 对比 Printify', group: '对比', to: '/comparisons/printful-vs-printify' },
-  { value: 'Printify 对比 Gelato', group: '对比', to: '/comparisons/printify-vs-gelato' },
-  { value: 'Printful 对比 Gelato', group: '对比', to: '/comparisons/printful-vs-gelato' },
-  { value: 'Etsy 对比 Redbubble', group: '对比', to: '/comparisons/etsy-vs-redbubble' },
-  { value: 'Shopify 对比 Etsy', group: '对比', to: '/comparisons/shopify-vs-etsy' },
-  { value: 'PODpartner 对比 Printful', group: '对比', to: '/comparisons/podpartner-vs-printful' },
-  { value: 'POD 落地成本指数', group: '数据', to: '/cost-index' },
-  { value: '平台对比', group: '页面', to: '/comparisons' },
-  { value: '软件与工具', group: '页面', to: '/tools' }
+  { value: 'Apliiq', group: '供应商', to: '/suppliers/apliiq' }
 ]
 
 // 产品索引：同款产品只保留一条联想（取价格最低的供应商），直接跳到其产品目录并定位
@@ -100,32 +75,11 @@ export const proof = {
 
 export const newsletter = {
   title: '订阅 PrintOnDemand Business 周报',
-  desc: '每周一封短邮件，汇总按需打印领域的供应商、工具、平台与生产动态。',
+  desc: '每周一封短邮件，汇总按需打印领域的供应商与生产动态。',
   label: '邮箱地址',
   cta: '订阅周报',
   note: '不发垃圾邮件，随时可退订。请查看我们的隐私政策。'
 }
-
-export const discoveryCards = [
-  {
-    title: '平台对比',
-    desc: '供应商、平台与建站工具的并排数据矩阵，一眼看清差异。',
-    cta: '去看看',
-    to: '/comparisons',
-    icon: 'el-icon-s-grid',
-    tone: 'violet',
-    examples: ['Printful 对比 Printify', 'Printify 对比 Gelato', 'Shopify 对比 Etsy']
-  },
-  {
-    title: '软件与工具',
-    desc: '为 POD 卖家整理的设计、样机、定制与营销工具合集。',
-    cta: '去看看',
-    to: '/tools',
-    icon: 'el-icon-set-up',
-    tone: 'amber',
-    examples: ['Kittl', 'Placeit', '个性化插件']
-  }
-]
 
 export const articles = [
   {
@@ -194,15 +148,12 @@ export const faqs = [
 ]
 
 export const footer = {
-  desc: '一个独立的按需打印目录：收录供应商、平台对比、成本数据与实操指南，服务于店主与独立创作者。',
+  desc: '一个独立的按需打印目录：收录供应商、产品清单与实操指南，服务于店主与独立创作者。',
   columns: [
     {
       title: '目录',
       links: [
-        { label: '全部供应商', to: '/suppliers' },
-        { label: '平台对比', to: '/comparisons' },
-        { label: '软件与工具', to: '/tools' },
-        { label: 'POD 落地成本指数', to: '/cost-index' }
+        { label: '全部供应商', to: '/suppliers' }
       ]
     },
     {
@@ -210,7 +161,6 @@ export const footer = {
       links: [
         { label: '博客', section: 'articles' },
         { label: '销售指南', section: 'articles' },
-        { label: '供应商对比', to: '/comparisons' },
         { label: '每周速递', section: 'newsletter' }
       ]
     },

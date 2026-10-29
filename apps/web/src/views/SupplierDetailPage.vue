@@ -35,9 +35,6 @@
               访问 {{ profile.name }}
               <i class="el-icon-top-right"></i>
             </el-button>
-            <el-button size="large" round @click="$router.push('/comparisons')">
-              与其他平台对比
-            </el-button>
           </div>
         </div>
 
@@ -290,6 +287,7 @@ export default {
     if (!this.profile.id) this.$router.replace('/suppliers')
   },
   methods: {
+    variantName,
     visitSite() {
       window.open(this.profile.website, '_blank', 'noopener')
     },

@@ -26,8 +26,7 @@
 
       <p class="suppliers-note" v-reveal>
         <i class="el-icon-info"></i>
-        供应商数据每周更新 · 落地成本与交付时效可在
-        <router-link to="/cost-index">POD 落地成本指数</router-link> 中查看。
+        供应商数据每周更新 · 产品数量与交付时效以各家目录为准。
       </p>
     </div>
   </section>

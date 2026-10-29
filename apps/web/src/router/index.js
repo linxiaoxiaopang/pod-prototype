@@ -31,26 +31,6 @@ export default new Router({
       name: 'supplier-detail',
       component: () => import('@/views/SupplierDetailPage.vue')
     },
-    {
-      path: '/comparisons',
-      name: 'comparisons',
-      component: () => import('@/views/ComparisonsPage.vue')
-    },
-    {
-      path: '/comparisons/:id',
-      name: 'comparison-detail',
-      component: () => import('@/views/ComparisonDetailPage.vue')
-    },
-    {
-      path: '/cost-index',
-      name: 'cost-index',
-      component: () => import('@/views/CostIndexPage.vue')
-    },
-    {
-      path: '/tools',
-      name: 'tools',
-      component: () => import('@/views/ToolsPage.vue')
-    },
     { path: '*', redirect: '/' }
   ]
 })

@@ -52,7 +52,7 @@ import ImageSearchPanel from './ImageSearchPanel.vue'
 import { hero, searchIndex } from '@/data/content'
 import { bestProductMatch } from '@/data/products'
 
-const GROUP_ORDER = { '供应商': 0, '对比': 1, '产品': 2, '页面': 3, '数据': 4 }
+const GROUP_ORDER = { '供应商': 0, '产品': 1 }
 
 export default {
   name: 'HeroSearch',
@@ -109,7 +109,7 @@ export default {
       const value = raw.toLowerCase()
 
       if (!value) {
-        this.$message.warning('请输入供应商、产品、对比或工具名称后再搜索。')
+        this.$message.warning('请输入供应商或产品名称后再搜索。')
         return
       }
 
