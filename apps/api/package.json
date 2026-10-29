@@ -1,0 +1,7 @@
+{
+  "name": "@pod/api",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "业务端轻量代理：以图搜图的视觉识别接口（不暴露 API key）"
+}

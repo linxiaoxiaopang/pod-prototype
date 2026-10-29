@@ -1,0 +1,29 @@
+{
+  "name": "pod-prototype",
+  "version": "1.0.0",
+  "private": true,
+  "description": "POD 供应商目录原型：业务端（web）+ 运营后台（admin）",
+  "scripts": {
+    "dev": "npm run dev:web",
+    "dev:web": "npm --prefix apps/web run dev",
+    "dev:admin": "npm --prefix apps/admin run dev",
+    "build": "npm run build:web && npm run build:admin",
+    "build:web": "npm --prefix apps/web run build",
+    "build:admin": "npm --prefix apps/admin run build",
+    "preview:web": "npm --prefix apps/web run preview",
+    "preview:admin": "npm --prefix apps/admin run preview",
+    "kill:port": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/kill-port.ps1",
+    "kill:5173": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/kill-port.ps1 -Port 5173",
+    "kill:5174": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/kill-port.ps1 -Port 5174"
+  },
+  "dependencies": {
+    "element-ui": "^2.15.14",
+    "vue": "^2.7.16",
+    "vue-router": "^3.6.5"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue2": "^2.3.3",
+    "sass": "^1.77.8",
+    "vite": "^5.4.11"
+  }
+}

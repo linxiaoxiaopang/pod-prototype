@@ -1,0 +1,172 @@
+@use './variables' as *;
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#app {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: $bg;
+  font-family: $font;
+  font-size: 14px;
+  color: $ink;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3,
+h4,
+p,
+dl,
+dd,
+figure {
+  margin: 0;
+}
+
+ul,
+ol {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font-family: $font;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  border: 3px solid transparent;
+  border-radius: 99px;
+  background-clip: content-box;
+  background-color: rgba(13, 16, 48, 0.18);
+}
+
+/* ---------- Element UI 定制 ---------- */
+.el-button {
+  font-family: $font;
+  border-radius: 10px;
+  font-weight: 600;
+}
+
+.el-button--primary {
+  background: $primary;
+  border-color: $primary;
+
+  &:hover,
+  &:focus {
+    background: $primary-dark;
+    border-color: $primary-dark;
+  }
+}
+
+.el-input__inner,
+.el-textarea__inner {
+  font-family: $font;
+  border-radius: 10px;
+  border-color: $line;
+  color: $ink;
+
+  &:focus {
+    border-color: rgba(91, 75, 255, 0.6);
+  }
+}
+
+.el-select .el-input__inner {
+  border-radius: 10px;
+}
+
+.el-table {
+  font-family: $font;
+  color: $ink;
+
+  &::before {
+    display: none;
+  }
+
+  th.el-table__cell {
+    background: #fafbff;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: $muted;
+  }
+
+  td.el-table__cell {
+    padding: 12px 0;
+  }
+
+  .el-table__row:hover > td.el-table__cell {
+    background: #fafbff;
+  }
+}
+
+.el-pagination {
+  font-family: $font;
+
+  .el-pager li,
+  .btn-prev,
+  .btn-next {
+    border-radius: 8px;
+    font-weight: 600;
+  }
+
+  .el-pager li.active {
+    background: $primary;
+    color: #fff;
+  }
+}
+
+.el-card {
+  border-radius: $radius-lg;
+  border-color: $line;
+}
+
+.el-message {
+  font-family: $font;
+  border-radius: 12px;
+}
+
+.el-dropdown-menu {
+  border-radius: 12px;
+  padding: 6px;
+}
+
+.el-dropdown-menu__item {
+  border-radius: 8px;
+  font-family: $font;
+
+  &:hover {
+    background: $primary-soft;
+    color: $primary;
+  }
+}
+
+.el-switch.is-checked .el-switch__core {
+  background: $primary;
+  border-color: $primary;
+}
+
+.el-form-item__label {
+  font-weight: 600;
+  color: $ink-soft;
+}

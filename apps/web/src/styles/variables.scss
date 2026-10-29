@@ -1,0 +1,83 @@
+// =========================================================
+// 设计变量（供所有组件 @use 引入）
+// =========================================================
+$primary: #5b4bff;
+$primary-dark: #4030d8;
+$primary-soft: #eeeaff;
+$accent: #ff6b35;
+$accent-soft: #fff0e9;
+$success: #16b981;
+
+$ink: #0d1030;
+$ink-soft: #4a4f6b;
+$muted: #858aa3;
+$line: #e7e9f4;
+
+$bg: #ffffff;
+$bg-soft: #f6f7fd;
+$bg-dark: #0b0d24;
+
+$radius-xs: 8px;
+$radius-sm: 12px;
+$radius: 18px;
+$radius-lg: 28px;
+$radius-xl: 40px;
+
+$shadow-xs: 0 1px 2px rgba(13, 16, 48, 0.06);
+$shadow-sm: 0 4px 14px -6px rgba(13, 16, 48, 0.16);
+$shadow: 0 20px 44px -22px rgba(13, 16, 48, 0.32);
+$shadow-lg: 0 44px 90px -46px rgba(13, 16, 48, 0.5);
+
+$container: 1200px;
+$header-h: 72px;
+$announce-h: 46px;
+$ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+
+$font: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC',
+  'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+
+// =========================================================
+// Mixins
+// =========================================================
+@mixin container {
+  width: 100%;
+  max-width: $container;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+@mixin section {
+  padding: 104px 0;
+}
+
+@mixin down($width) {
+  @media (max-width: $width) {
+    @content;
+  }
+}
+
+@mixin up($width) {
+  @media (min-width: $width) {
+    @content;
+  }
+}
+
+@mixin card {
+  background: #fff;
+  border: 1px solid $line;
+  border-radius: $radius-lg;
+  box-shadow: $shadow-xs;
+}
+
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin text-clamp($lines: 2) {
+  display: -webkit-box;
+  -webkit-line-clamp: $lines;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}

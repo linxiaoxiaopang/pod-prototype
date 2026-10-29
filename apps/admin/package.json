@@ -1,0 +1,21 @@
+{
+  "name": "@pod/admin",
+  "version": "1.0.0",
+  "private": true,
+  "description": "后台端：供应商、产品与内容运营管理台",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "element-ui": "^2.15.14",
+    "vue": "^2.7.16",
+    "vue-router": "^3.6.5"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue2": "^2.3.3",
+    "sass": "^1.77.8",
+    "vite": "^5.4.11"
+  }
+}

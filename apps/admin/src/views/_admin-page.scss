@@ -1,0 +1,169 @@
+// 管理列表页共用的布局样式（在各页面 <style scoped> 中 @use）
+@use '../styles/variables' as *;
+
+.page-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+
+  h1 {
+    font-size: 24px;
+    letter-spacing: -0.03em;
+    margin-bottom: 6px;
+  }
+
+  p {
+    font-size: 13px;
+    color: $muted;
+  }
+}
+
+.panel {
+  @include card;
+  padding: 0 20px 14px;
+}
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding: 16px 0;
+  margin-bottom: 4px;
+  border-bottom: 1px solid $line;
+}
+
+.search {
+  width: 260px;
+
+  :deep(.el-input__inner) {
+    height: 38px;
+  }
+
+  @include down(620px) {
+    width: 100%;
+  }
+}
+
+.filter {
+  width: 156px;
+
+  :deep(.el-input__inner) {
+    height: 38px;
+  }
+}
+
+.result {
+  margin-left: auto;
+  font-size: 12.5px;
+  color: $muted;
+}
+
+.table {
+  width: 100%;
+
+  :deep(.el-table__cell) {
+    vertical-align: middle;
+  }
+}
+
+.supplier-cell {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  strong {
+    display: block;
+    font-size: 13.5px;
+    font-weight: 700;
+    color: $ink;
+  }
+
+  small {
+    font-size: 11.5px;
+    color: $muted;
+  }
+}
+
+.avatar {
+  @include flex-center;
+  width: 34px;
+  height: 34px;
+  border-radius: 9px;
+  background: $primary-soft;
+  color: $primary;
+  font-size: 11.5px;
+  font-weight: 800;
+  flex-shrink: 0;
+
+  &.is-paused {
+    background: rgba(245, 158, 11, 0.14);
+    color: #b4740a;
+  }
+
+  &.is-draft {
+    background: $bg;
+    color: $muted;
+  }
+}
+
+.tag {
+  display: inline-block;
+  margin: 2px 6px 2px 0;
+  padding: 2px 8px;
+  border-radius: 6px;
+  background: $bg;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: $ink-soft;
+  white-space: nowrap;
+
+  &.more {
+    background: $primary-soft;
+    color: $primary;
+  }
+}
+
+.link {
+  padding: 0 8px;
+  border: none;
+  background: transparent;
+  font-family: $font;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: $primary;
+  cursor: pointer;
+
+  &:hover {
+    color: $primary-dark;
+  }
+}
+
+.pager {
+  display: flex;
+  justify-content: flex-end;
+  padding: 16px 0 4px;
+}
+
+.money {
+  font-weight: 700;
+  color: $ink;
+}
+
+.muted {
+  color: $muted;
+}
+
+@include down(760px) {
+  .panel {
+    padding: 0 12px 10px;
+  }
+
+  .result {
+    width: 100%;
+    margin-left: 0;
+  }
+}

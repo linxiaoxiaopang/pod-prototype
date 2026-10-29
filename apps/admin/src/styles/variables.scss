@@ -1,0 +1,50 @@
+// 后台端设计变量
+$primary: #5b4bff;
+$primary-dark: #4030d8;
+$primary-soft: #eeeaff;
+$success: #16b981;
+$warning: #f59e0b;
+$danger: #ef4444;
+
+$ink: #0d1030;
+$ink-soft: #4a4f6b;
+$muted: #858aa3;
+$line: #e7e9f4;
+
+$bg: #f4f5fb;
+$card: #ffffff;
+$sidebar: #0b0d24;
+$sidebar-soft: #151936;
+
+$radius-sm: 10px;
+$radius: 14px;
+$radius-lg: 20px;
+
+$shadow-xs: 0 1px 2px rgba(13, 16, 48, 0.06);
+$shadow-sm: 0 8px 24px -16px rgba(13, 16, 48, 0.28);
+
+$sidebar-w: 240px;
+$header-h: 64px;
+$ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+
+$font: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC',
+  'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin card {
+  background: $card;
+  border: 1px solid $line;
+  border-radius: $radius-lg;
+  box-shadow: $shadow-xs;
+}
+
+@mixin down($width) {
+  @media (max-width: $width) {
+    @content;
+  }
+}
